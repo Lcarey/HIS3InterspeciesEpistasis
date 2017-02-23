@@ -2,9 +2,9 @@
 Analysis of Vicka's His3 Epistasis data
 
 Figure 1 - experiment idea & overview
-  Wright hypercube
-  Unrooted species tree w/surrounding cloud (vs point w/cloud for GFP)
-  some overview of the data (diversity across the gene w/segments)
+  * Wright hypercube
+  * Unrooted species tree w/surrounding cloud (vs point w/cloud for GFP)
+  * some overview of the data (diversity across the gene w/segments)
 
 Figure 2
 
