@@ -1,0 +1,148 @@
+
+n_positions = x(1) ; 
+n_possible_aa = x(2) ; 
+
+fit_mat = reshape( x(3:end) , n_positions , n_possible_aa );
+
+% % Generalized logistic function
+% %  https://en.wikipedia.org/wiki/Generalised_logistic_function
+% A = x(1) ; % lower asymptote
+% K = x(2) ; % upper asymptote
+% B = x(3) ; % growth rate
+% v = x(4) ; % v >0 : affects near which asymptote maximum growth occurs.
+% Q = x(5) ; % Q is related to the value Y(0)
+% C = x(6) ; % typically == 1
+% Y(t) = A + (K - A)/(C + Q * exp( -1 * B * t))^(1/v)
+
+% Logistic function
+%  https://en.wikipedia.org/wiki/Logistic_function
+% k = x(1) ; % steepness
+% L = x(2) ; % max Y
+% x0 = x(3) ; % midpoint of curve
+% y = L / ( 1 + exp( -k*(x-x0) ) )
+
+%
+
+n_variants = 1e4 ;
+varmat = zeros(n_positions , n_possible_aa);
+
+% fitmat contains fitness defects for each AA at each pos
+%  0 == no fitness defect
+fitmat = varmat  ;
+for I = 1:n_positions
+   % fitmat( I , randi(n_possible_aa) ) = random('uniform',0,1);
+    fitmat( I , : ) = random('exponential',0.2,n_possible_aa,1);
+
+end
+%fitmat = fitmat.^2./max(fitmat(:).^2) ;
+
+real_x = zeros( n_variants , 1);
+
+amino_acids = 1:20 ;
+fitness_penalties = zeros( numel(amino_acids) , 1);
+fitness_penalties(1) = 1   ;
+
+variants_fitness = NaN( n_variants , 1);
+variants_seqs    = cell( n_variants , 1);
+
+for I = 1:n_variants
+    variants_seqs{I} = varmat ;
+    nmut = randi(n_positions) ; 
+    idx = randsample( n_positions, nmut) ;
+    variants_seqs{I}(idx , 1 ) = 1 ;
+    for J = find(variants_seqs{I}(:,1)==0)'
+        variants_seqs{I}(J,randi(n_possible_aa))=1;
+    end
+ %   if  sum(variants_seqs{I}(:,3))   ; % for testing 'epistasis'
+        real_x(I) = sum( fitmat( logical(variants_seqs{I})) ) ;
+  %  end
+    variants_fitness(I) = 1-logistic( real_x(I) );
+end
+
+%
+Y = variants_fitness ; 
+X = cell2mat(cellfun( @(X)X(:) , variants_seqs,'UniformOutput',false)')' ;
+
+figure ; 
+plot( real_x , variants_fitness,'ok');
+xlabel('real x')
+ylabel('variants fitness')
+
+
+% %%
+% variants_seqs{ variants_fitness == min(variants_fitness) }
+% fitmat
+% variants_seqs{ find(variants_fitness == max(variants_fitness),1) }
+% 
+
+%% 
+[strongest_fitness_variant_r,strongest_fitness_variant_c]=find((fitmat==max(fitmat(:)))) ;
+idx = arrayfun( @(I) variants_seqs{I}(strongest_fitness_variant_r,strongest_fitness_variant_c)==1 , 1:n_variants);
+figure; hold on ; grid on; 
+boxplot( variants_fitness , ~idx);
+set(gca,'xticklabel',{'has worst AA' 'no'});
+ylabel('fitness')
+%histogram( variants_fitness(~idx),'Normalization','Probability')
+%histogram( variants_fitness(idx),'Normalization','Probability')
+
+%%
+%figure; 
+%plot( fitmat(:) ,'ok');
+toplot = mdl.Coefficients.Estimate(2:end) ; % (1) is Intercept
+fitvals = round(fitmat(:)*10) ; 
+pVals = mdl.Coefficients.pValue(2:end);
+figure;  hold on; 
+boxplot( toplot(pVals<10.05) , fitvals(pVals<10.05) ) ;
+%boxplot( toplot ,  fitmat(:)  ) ;
+
+%set(gca,'xticklabel',{'not important' , 'Important' })
+ylabel('Model coefficient')
+
+%% find best fit to sigmoid
+rbest = 0 ; 
+parbest = [0 0 0];
+for k = 0:0.1:2
+    for L = 0:0.1:2
+        for x0 = 0:0.1:2
+            ypred = 1 - ( L ./ ( 1 + exp( -k.*(real_x-x0) ) ) ) ; 
+            r = corr(ypred,variants_fitness);
+            if(r>rbest)
+                parbest = [k L x0];
+                rbest = r;
+            end
+        end
+    end
+end
+parbest  , rbest
+
+
+%% Cross-validation
+Y = variants_fitness ; 
+X = cell2mat(cellfun( @(X)X(:) , variants_seqs,'UniformOutput',false)')' ;
+
+Indices = crossvalind('Kfold', n_variants, 10);
+fit_coeffs_lin = NaN( n_positions , n_possible_aa , 10);
+fit_coeffs_log = NaN( n_positions , n_possible_aa , 10);
+
+for I = 1:10
+    test_idx = Indices==I ; 
+    mdl_logistic = fitglm( X(~test_idx,:) , Y(~test_idx) ,'Link','logit');
+    mdl_nologit  = fitglm( X(~test_idx,:) , Y(~test_idx) );
+    
+    y_logistic_pred = predict( mdl_logistic , X(test_idx,:)); 
+    y_nologit_pred  = predict( mdl_nologit , X(test_idx,:)); 
+    
+    rl = corr(y_logistic_pred,Y(test_idx));
+    rnol = corr(y_nologit_pred,Y(test_idx) );
+    
+    fit_coeffs_lin( : ,  : , I) = reshape( mdl_nologit.Coefficients.Estimate(2:end) , [] , n_possible_aa) ;
+    fit_coeffs_log( : ,  : , I) = reshape( mdl_logistic.Coefficients.Estimate(2:end) , [] , n_possible_aa) ; 
+    fprintf('%0.02f\t%0.02f\n' , corr( fitmat(:) , reshape(fit_coeffs_log(:,:,I),[],1) ) ,  corr( fitmat(:) , reshape(fit_coeffs_lin(:,:,I),[],1) ) ); 
+
+    fprintf('%0.0e\t%0.02f,%0.02f\t%0.02f,%0.02f\n' , n_variants , mdl_logistic.Rsquared.Ordinary , rl^2 , mdl_nologit.Rsquared.Ordinary , rnol^2);
+end
+fit_coeffs_lin = median(fit_coeffs_lin,3) ;
+fit_coeffs_log = median(fit_coeffs_log,3) ;
+
+corr( fitmat(:) , fit_coeffs_log(:))
+corr( fitmat(:) , fit_coeffs_lin(:))
