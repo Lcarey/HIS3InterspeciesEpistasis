@@ -1,10 +1,21 @@
+function ModelDecayFunctionFromRealData( data_file_name , N_variants_to_fit )
+%% setup paths
+addpath(genpath('~/Develop/matlab/'));
+addpath(genpath('~/Develop/Matlab/'));
+addpath(genpath('~/Develop/HIS3InterspeciesEpistasis/'));
+
+% if numel(gcp('nocreate'))==0 , 	parpool local , end
 %% load data
-start_runtime = char(datetime) ;
 DataDir = '~/Develop/HIS3InterspeciesEpistasis/Data/';
-T = readtable([ DataDir 'S12_scaled_info.csv']);
+T = readtable([ DataDir data_file_name ] );
+%  T = readtable([ DataDir 'S12_scaled_info.csv']);
 T = T( T.middle & T.nogap & ~T.stop , :) ; % no crap
 T = T( logical(T.nat_lib) , :);
-T = T( 1:1000 , :);
+N_variants_to_fit = min(N_variants_to_fit,height(T));
+T = T( 1:N_variants_to_fit , :);
+
+output_file_basename = [ regexprep( char(datetime) , ' ' ,'') '_' num2str(N_variants_to_fit) '_' data_file_name '_' ] ;;
+
 %% setup variables from data
 global n_possible_aas ; 
 n_positions = T.len(1) ;
@@ -22,7 +33,7 @@ fitness_for_all_variants = ( 1-T.s)'  ; % XDATA & function output have to be sam
 
 %% fit logistic model w/ cross-validation
 
-fit_opts = optimset( 'Diagnostics' , 'off' , 'Display' , 'off', 'PlotFcn' , [] ,'UseParallel' , true ) ;
+fit_opts = optimset( 'Diagnostics' , 'off' , 'Display' , 'off', 'PlotFcn' , [] ,'UseParallel' , false ) ;
 
 deltaG_matrix_init = random('uniform',0,1,n_possible_aas,n_positions) ; % fitness defect caused by each AA at each position
 deltaG_vect_init = deltaG_matrix_init(:);  % this is what we want to learn
@@ -58,7 +69,6 @@ for I = 1:10
 end
 
 for I = 1:10
-    fprintf('.');
     tic; 
     aa = aa_for_all_variants( R.Train{I} , :);
     fit = fitness_for_all_variants(  R.Train{I} ) ; 
@@ -83,15 +93,18 @@ for I = 1:10
     R.pred_fit_test{I} = pred_fit_test ;
     R.fit_train{I} = fit ;
     R.fit_test{I} = fit_test ; 
+
+	fprintf('%d\t%fsec\n' , I , R.runtime(I) );
+	save( ['R_logistic' output_file_basename '_' num2str(I) '.mat'] ,'R')
 end
 
 R
-save( ['R_logistic' start_runtime '.mat'] ,'R')
+save( ['R_logistic' output_file_basename '.mat'] ,'R')
 
 
 %% fit linear model w/ cross-validation
 
-fit_opts = optimset( 'Diagnostics' , 'off' , 'Display' , 'off', 'PlotFcn' , [] ,'UseParallel' , true ) ;
+fit_opts = optimset( 'Diagnostics' , 'off' , 'Display' , 'off', 'PlotFcn' , [] ,'UseParallel' , false ) ;
 
 deltaG_matrix_init = random('uniform',0,1,n_possible_aas,n_positions) ; % fitness defect caused by each AA at each position
 deltaG_vect_init = deltaG_matrix_init(:);  % this is what we want to learn
@@ -99,8 +112,8 @@ deltaG_vect_init = deltaG_matrix_init(:);  % this is what we want to learn
 init_x0_k_L_ddGvect = [0 0 0 deltaG_vect_init'] ; 
 lb = zeros( size(init_x0_k_L_ddGvect));
 ub = ones( size(init_x0_k_L_ddGvect));
-ub(1:2) = 1000 ;
-ub(1:2) = -1000 ;
+ub(1:2) = 100 ;
+ub(1:2) = -100 ;
 
 Indices = crossvalind('Kfold', n_variants, 10);
 R = dataset();
@@ -153,7 +166,10 @@ for I = 1:10
     R.pred_fit_test{I} = pred_fit_test ;
     R.fit_train{I} = fit ;
     R.fit_test{I} = fit_test ; 
+
+	fprintf('%d\t%fsec\n' , I , R.runtime(I) );
+	save( ['R_linear' output_file_basename  '_' num2str(I)  '.mat'] ,'R')
 end
 
 R
-save( ['R_linear' start_runtime '.mat'] ,'R')
+save( ['R_linear' output_file_basename '.mat'] ,'R')
