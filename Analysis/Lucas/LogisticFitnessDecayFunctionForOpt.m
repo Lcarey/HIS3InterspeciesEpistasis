@@ -15,10 +15,10 @@ function [ predicted_fitness ] = LogisticFitnessDecayFunctionForOpt( init_x0_k_L
 % global aa_for_all_variants_vect ; 
 % global fitness_for_all_variants_vect ; 
 
-n_possible_aas = 20 ;
 x0 = init_x0_k_L_ddGvect(1) ;
 k  = init_x0_k_L_ddGvect(2) ;
 L  = init_x0_k_L_ddGvect(3) ;
+global n_possible_aas  ;
 
 logistic_function = @(x0,k,L,sum_delta_Gs) L ./ (1+exp( (-1.*k).*(sum_delta_Gs-x0) ) ) ; % x0 , k , L
 
