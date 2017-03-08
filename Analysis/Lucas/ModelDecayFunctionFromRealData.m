@@ -4,7 +4,7 @@ DataDir = '~/Develop/HIS3InterspeciesEpistasis/Data/';
 T = readtable([ DataDir 'S12_scaled_info.csv']);
 T = T( T.middle & T.nogap & ~T.stop , :) ; % no crap
 T = T( logical(T.nat_lib) , :);
-T = T( 1:2000 , :);
+T = T( 1:1000 , :);
 %% setup variables from data
 global n_possible_aas ; 
 n_positions = T.len(1) ;
@@ -76,7 +76,7 @@ for I = 1:10
     aa_test = aa_for_all_variants( R.Test{I} , :);
     fit_test = fitness_for_all_variants(  R.Test{I} );
     pred_fit_test = LogisticFitnessDecayFunctionForOpt( fit_x0_k_L_ddGvect , aa_test(:)  ) ; 
-    [ R.test_r2(I) , R.test_rmse(I)] = rsquare( fit_test , pred_fit_test )
+    [ R.test_r2(I) , R.test_rmse(I)] = rsquare( fit_test , pred_fit_test ) ;
 
     
     R.pred_fit_train{I} = pred_fit_train ; 
@@ -146,7 +146,7 @@ for I = 1:10
     aa_test = aa_for_all_variants( R.Test{I} , :);
     fit_test = fitness_for_all_variants(  R.Test{I} );
     pred_fit_test = LinearFitnessDecayFunctionForOpt( fit_x0_k_L_ddGvect , aa_test(:)  ) ; 
-    [ R.test_r2(I) , R.test_rmse(I)] = rsquare( fit_test , pred_fit_test )
+    [ R.test_r2(I) , R.test_rmse(I)] = rsquare( fit_test , pred_fit_test ) ;
 
     
     R.pred_fit_train{I} = pred_fit_train ; 
