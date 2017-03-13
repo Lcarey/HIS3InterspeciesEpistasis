@@ -1,0 +1,8 @@
+input_file	~/Lab/CRG/Research/GFP/data/amino_acid_genotypes_to_brightness
+output_folder	23_2_17_GFP/
+learning_rate	0.1
+batch_size	628
+reshuffling_frequency	100
+number_of_iterations	100000
+optimizer	tf.train.AdagradOptimizer
+net_structure	1,tf.tanh	3,tf.tanh	1,tf.tanh
