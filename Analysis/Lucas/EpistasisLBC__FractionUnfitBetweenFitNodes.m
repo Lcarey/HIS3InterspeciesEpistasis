@@ -166,4 +166,7 @@ set(gcf,'PaperPosition',[0 0 10 7])
 print('-dpsc2', [ base_file_name '.eps'] , '-append');
 close; 
 
+
+save( [ base_file_name '.mat']  , 'T' , 'R')
+
 end
