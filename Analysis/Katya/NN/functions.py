@@ -16,12 +16,12 @@ def format_data(data):
     # formatting data for the nn input
     print('Normalizing data...')
     nn_genotypes_values = np.zeros((len(data), len(unique_mutations)))
-    nn_brightness_values = data.medianBrightness.values
+    nn_brightness_values = data.fitness.values
     for i in range(len(unique_mutations)):
-        nn_genotypes_values[:, i] = data.aaMutations.str.contains(unique_mutations[i]).astype(np.float32)
+        nn_genotypes_values[:, i] = data.mut_list.str.contains(unique_mutations[i]).astype(np.float32)
 
     nn_brightness_values = (nn_brightness_values - min(nn_brightness_values)) / max(
-        nn_brightness_values - min(nn_brightness_values)) * 2 - 1
+        nn_brightness_values - min(nn_brightness_values))
 
     return nn_genotypes_values, nn_brightness_values
 
@@ -86,8 +86,8 @@ def density_plot(x, y, iteration_number, costs, test_score):
     # formatting
     plt.figure(figsize=[6, 4])
     plt.scatter(x, y, c=z, s=3, edgecolor='', cmap='viridis_r')
-    plt.xlim(-1, 1)
-    plt.ylim(-1, 1)
+    # plt.xlim(-1, 1)
+    # plt.ylim(-1, 1)
     plt.xlabel('Observed brightness')
     plt.ylabel('Predicted brightness')
     plt.title('Iteration %s: cost=%.7f, EVS=%.2f' % (iteration_number, costs, test_score))

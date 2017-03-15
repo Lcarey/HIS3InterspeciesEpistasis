@@ -14,8 +14,8 @@ class Data():
         :param batch_size: size of the batches to use with this data
         """
         data = pd.read_table(input_file)
-        data.aaMutations = data.mut_list.fillna('')
-        unique_mutations = set(':'.join(data.aaMutations).split(':'))
+        data.mut_list = data.mut_list.fillna('')
+        unique_mutations = set(':'.join(data.mut_list).split(':'))
         unique_mutations = sorted(list(unique_mutations))
         if '' in unique_mutations:
             unique_mutations.remove('')
@@ -75,7 +75,7 @@ class TFNet(object):
                 name=layer + '_weights')
             self.biases[layer] = tf.Variable(tf.random_normal([1, 1, self.neurons[layer]]), name=layer + '_biases')
             self.input[layer] = tf.add(
-                tf.matmul(input_data.nn_genotypes, broadcast(self.weights[layer], batch_size)),
+                tf.batch_matmul(input_data.nn_genotypes, broadcast(self.weights[layer], batch_size)),
                 broadcast(self.biases[layer], batch_size))
             self.output[layer] = eval(self.structure[layer][1])(self.input[layer])
 

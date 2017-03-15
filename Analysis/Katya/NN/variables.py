@@ -1,9 +1,9 @@
 import matplotlib
 matplotlib.use('Agg')
 import argparse
-# import boto3
+import boto3
 
-# s3 = boto3.resource('s3')
+s3 = boto3.resource('s3')
 
 parser = argparse.ArgumentParser(description='''
 
