@@ -1,5 +1,5 @@
-function [ predicted_fitness ] = LogisticFitnessDecayFunctionForOpt( init_x0_k_L_ddGvect , aa_for_all_variants_vect  )
-%% [ predicted_fitness ] = LogisticFitnessDecayFunctionForOpt( init_x0_k_L_ddGvect , aa_for_all_variants_vect  )  
+function [ predicted_fitness , sum_delta_Gs ] = LogisticFitnessDecayFunctionForOpt( init_x0_k_L_ddGvect , aa_for_all_variants_vect  )
+%% [ predicted_fitness , sum_delta_Gs] = LogisticFitnessDecayFunctionForOpt( init_x0_k_L_ddGvect , aa_for_all_variants_vect  )  
 %
 % init_x0_k_L_ddGvect    : a vector of paramters for the fitness function (eg: sigmoid)
 %             followed by delta_G_vect_init
@@ -30,8 +30,9 @@ aa_for_all_variants = reshape( aa_for_all_variants_vect , [] ,n_positions) ;
 n_variants = size(aa_for_all_variants,1);
 
 sum_delta_Gs  = arrayfun( @(I)sum( deltaG_vect( ((0:(n_positions-1)) .* n_possible_aas)+aa_for_all_variants(I,:))) , 1:n_variants) ;
+sum_delta_Gs = sum_delta_Gs ./ max(sum_delta_Gs) ; % [0 1] normalize
 
-predicted_fitness = 1-logistic_function( x0, k , L , sum_delta_Gs) ;
+predicted_fitness = logistic_function( x0, k , L , sum_delta_Gs) ;
 
 % [r2 , rmse ] = rsquare( fitness_for_all_variants_vect , predicted_fitness );
 
