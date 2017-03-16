@@ -1,5 +1,5 @@
-function R = EpistasisLBC__FractionUnfitBetweenFitNodes( fitness_file_csv  , N_Pairs_Fast_to_measure , fast_fit_cutoff ,  slow_fit_cutoff )
-%%  R = EpistasisLBC__FractionUnfitBetweenFitNodes( fitness_file_csv  , N_Pairs_Fast_to_measure , fast_fit_cutoff ,  slow_fit_cutoff )
+function [ R  , T ] = EpistasisLBC__FractionUnfitBetweenFitNodes( fitness_file_csv  , N_Pairs_Fast_to_measure , fast_fit_cutoff ,  slow_fit_cutoff )
+%%  [ R , T ] = EpistasisLBC__FractionUnfitBetweenFitNodes( fitness_file_csv  , N_Pairs_Fast_to_measure , fast_fit_cutoff ,  slow_fit_cutoff )
 %
 %
 % LBC 2017
@@ -99,17 +99,30 @@ R.NIntMeasured = NaN( N_Pairs_Fast_to_measure , 1);
 R.StatesMeasured = NaN( N_Pairs_Fast_to_measure , 1);
 R.Seq1idx = NaN( N_Pairs_Fast_to_measure , 1);
 R.Seq2idx = NaN( N_Pairs_Fast_to_measure , 1);
+
+R.Seq1 = cell( N_Pairs_Fast_to_measure , 1);
+R.Seq2 = cell( N_Pairs_Fast_to_measure , 1);
+R.ShortSeq1 = cell( N_Pairs_Fast_to_measure , 1);
+R.ShortSeq2 = cell( N_Pairs_Fast_to_measure , 1);
+R.IntermediateStatesIDX = cell( N_Pairs_Fast_to_measure , 1);
+
 tic;
 for I = 1:N_Pairs_Fast_to_measure
     seq1 = T.aa_seq_varies{pairs(I,1)}; R.Seq1idx(I) = pairs(I,1) ; 
     seq2 = T.aa_seq_varies{pairs(I,2)}; R.Seq2idx(I) = pairs(I,2) ; 
+    R.Seq1{I} = T.aa_seq{pairs(I,1)} ;
+    R.Seq2{I} = T.aa_seq{pairs(I,2)} ;
+    R.ShortSeq1{I} = seq1 ;
+    R.ShortSeq2{I} = seq2 ;
     all_transition_states = ExpandSeqAlign( seq1 , seq2);
     idx = find( ismember( T.aa_seq_varies , all_transition_states) );
     R.FitnessDistributions{I} = T.s(idx) ;    
+    R.IntermediateStatesIDX{I} = idx ;
+    
     R.NUnfitMeasured(I) = sum( R.FitnessDistributions{I} <= slow_fit_cutoff);
     R.NFitMeasured(I) = sum( R.FitnessDistributions{I} >= fast_fit_cutoff);
     R.NIntMeasured(I) = sum( R.FitnessDistributions{I} < fast_fit_cutoff &  R.FitnessDistributions{I} > slow_fit_cutoff);
-
+ 
     R.HammingDistances(I) = HammingDistance( seq1 , seq2 ) ;
     R.StatesMeasured(I) = numel(idx)  ;
     if (mod(I,20)==0) , fprintf('.') , end;
