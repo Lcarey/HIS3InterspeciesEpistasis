@@ -1,0 +1,8 @@
+input_file	data/S1_short.txt
+output_folder	14_03_17_S1/
+learning_rate	0.1
+batch_size	100
+reshuffling_frequency	100
+number_of_iterations	100000
+optimizer	tf.train.AdagradOptimizer
+net_structure	1,tf.nn.relu	3,tf.nn.relu	1,tf.nn.relu
