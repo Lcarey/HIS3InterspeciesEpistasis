@@ -1,5 +1,5 @@
-function R = EpistasisLBC__FractionUnfitBetweenFitNodes( fitness_file_csv  , N_Pairs_Fast_to_measure , fast_fit_cutoff ,  slow_fit_cutoff )
-%%  R = EpistasisLBC__FractionUnfitBetweenFitNodes( fitness_file_csv  , N_Pairs_Fast_to_measure , fast_fit_cutoff ,  slow_fit_cutoff )
+function [ R  , T ] = EpistasisLBC__FractionUnfitBetweenFitNodes( fitness_file_csv  , N_Pairs_Fast_to_measure , fast_fit_cutoff ,  slow_fit_cutoff )
+%%  [ R , T ] = EpistasisLBC__FractionUnfitBetweenFitNodes( fitness_file_csv  , N_Pairs_Fast_to_measure , fast_fit_cutoff ,  slow_fit_cutoff )
 %
 %
 % LBC 2017
@@ -37,7 +37,6 @@ ecdf(T.s(~logical(T.stop) & logical(T.lib)))
 ecdf(T.s(~logical(T.stop) & logical(T.nat_lib)))
 ecdf(T.s(~logical(T.stop) & logical(T.nat_lib) & logical(T.middle)) );
 xlabel('Fitness')
-title('S7')
 set(gca,'xtick',0:.05:1)
 grid on ;
 set(gca,'ytick',0:.1:1)
@@ -47,8 +46,10 @@ xlim([0 0.55])
 line([fast_fit_cutoff fast_fit_cutoff],ylim,'LineStyle','--','Color','k')
 line([slow_fit_cutoff slow_fit_cutoff],ylim,'LineStyle','--','Color','k')
 
+title(base_file_name)
+
 set(gcf,'PaperPosition',[0 0 5 5])
-print('-dpsc2', [ base_file_name '.eps'] , '-append');
+print('-dpng', [ base_file_name '_dist.png'] , '-r300');
 close; 
 
 %% Must remove stop codons for results to work!
@@ -65,18 +66,20 @@ T = T( logical(T.nat_lib) , :);
 MapAA2I = containers.Map(  arrayfun(@(X){X},['A':'Z' '_' ])  , uint8(1:27) ) ; % all AAs + stop
 MapI2AA = containers.Map( uint8(1:27) ,   arrayfun(@(X){X},['A':'Z' '_' ])  ) ; % all AAs + stop
 
+%% find all columns that vary
+%   shrink the sequence down to only those columns
 aa_num = cellfun( @(A) arrayfun( @(X)MapAA2I(X),A) , T.aa_seq ,'UniformOutput' , false ); 
 aa_num_mat = cell2mat(aa_num) ; 
-% n_aa_per_col = NaN( 27 , length(T.aa_seq{1}) ) ; 
-% for I = 1:size(n_aa_per_col,2)
-%     [a,b]=count_unique(aa_num_mat(:,I));
-%     n_aa_per_col(a,I) = b ;
-% end
-% cols_with_variation = arrayfun( @(I)sum(n_aa_per_col(:,I)>1) , 1:size(n_aa_per_col,2)) > 1  ; 
+n_aa_per_col = NaN( 27 , length(T.aa_seq{1}) ) ; 
+for I = 1:size(n_aa_per_col,2)
+    [a,b]=count_unique(aa_num_mat(:,I));
+    n_aa_per_col(a,I) = b ;
+end
+cols_with_variation = arrayfun( @(I)sum(n_aa_per_col(:,I)>1) , 1:size(n_aa_per_col,2)) > 1  ; 
 
-variation_in_seq_mat = mean(aa_num_mat == aa_num{1} ) ~= 1    ; % these are the columns for which the AA seqs are not all exactly the same
+%variation_in_seq_mat = mean(aa_num_mat == aa_num{1} ) ~= 1    ; % these are the columns for which the AA seqs are not all exactly the same
 
-T.aa_seq_varies = cellfun( @(X) X(variation_in_seq_mat) , T.aa_seq,'UniformOutput',false); 
+T.aa_seq_varies = cellfun( @(X) X(cols_with_variation) , T.aa_seq,'UniformOutput',false); 
 %%
 
 T = T( : , {'aa_seq' 'aa_seq_varies'  's'});
@@ -99,17 +102,30 @@ R.NIntMeasured = NaN( N_Pairs_Fast_to_measure , 1);
 R.StatesMeasured = NaN( N_Pairs_Fast_to_measure , 1);
 R.Seq1idx = NaN( N_Pairs_Fast_to_measure , 1);
 R.Seq2idx = NaN( N_Pairs_Fast_to_measure , 1);
+
+R.Seq1 = cell( N_Pairs_Fast_to_measure , 1);
+R.Seq2 = cell( N_Pairs_Fast_to_measure , 1);
+R.ShortSeq1 = cell( N_Pairs_Fast_to_measure , 1);
+R.ShortSeq2 = cell( N_Pairs_Fast_to_measure , 1);
+R.IntermediateStatesIDX = cell( N_Pairs_Fast_to_measure , 1);
+
 tic;
 for I = 1:N_Pairs_Fast_to_measure
     seq1 = T.aa_seq_varies{pairs(I,1)}; R.Seq1idx(I) = pairs(I,1) ; 
     seq2 = T.aa_seq_varies{pairs(I,2)}; R.Seq2idx(I) = pairs(I,2) ; 
+    R.Seq1{I} = T.aa_seq{pairs(I,1)} ;
+    R.Seq2{I} = T.aa_seq{pairs(I,2)} ;
+    R.ShortSeq1{I} = seq1 ;
+    R.ShortSeq2{I} = seq2 ;
     all_transition_states = ExpandSeqAlign( seq1 , seq2);
     idx = find( ismember( T.aa_seq_varies , all_transition_states) );
     R.FitnessDistributions{I} = T.s(idx) ;    
+    R.IntermediateStatesIDX{I} = idx ;
+    
     R.NUnfitMeasured(I) = sum( R.FitnessDistributions{I} <= slow_fit_cutoff);
     R.NFitMeasured(I) = sum( R.FitnessDistributions{I} >= fast_fit_cutoff);
     R.NIntMeasured(I) = sum( R.FitnessDistributions{I} < fast_fit_cutoff &  R.FitnessDistributions{I} > slow_fit_cutoff);
-
+ 
     R.HammingDistances(I) = HammingDistance( seq1 , seq2 ) ;
     R.StatesMeasured(I) = numel(idx)  ;
     if (mod(I,20)==0) , fprintf('.') , end;
@@ -163,7 +179,7 @@ title('mean')
 subtitle( sprintf('%s nat-lib & middle & nostop (%d)' , base_file_name, height(T) ) )
 
 set(gcf,'PaperPosition',[0 0 10 7])
-print('-dpsc2', [ base_file_name '.eps'] , '-append');
+print('-dpng', [ base_file_name '.png'] , '-r300');
 close; 
 
 

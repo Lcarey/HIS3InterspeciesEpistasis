@@ -3,6 +3,7 @@ from matplotlib import pyplot as plt
 import matplotlib.gridspec as gridspec
 import matplotlib.image as mpimg 
 mpl.rcParams['pdf.fonttype'] = 42
+import os
 
 def density_plot(x, y, nbins=42, log=False):
     mask = (~np.isnan(x)) & (~np.isnan(y))
@@ -76,3 +77,25 @@ def improve_plot(ax, grid='xy', legend=False, visible_axes=True):
         plt.legend(loc=2, bbox_to_anchor=(1.05, 1), frameon=False)
 
     return ax
+
+
+class Counter:
+
+    def __init__(self, initial_count=0):
+        self.count = initial_count
+
+
+    def get_number(self, as_string=True):
+        self.count += 1
+        if as_string:
+            return '%02d' % self.count
+        return self.count
+
+    def reset(self, initial_count=0):
+        self.count = initial_count
+
+
+def save_image(image_counter, title, folder, prefix):
+    figure_name = '%s_img%s_%s.png' %(prefix, image_counter.get_number(), '_'.join(title.split()))
+    plt.savefig(os.path.join(folder, figure_name), dpi=300)
+
