@@ -51,4 +51,7 @@ dist_node_X		Hamming distance between genotype and internal node of philogenetic
 dist_min_all	Minimal among all distances
 
 dist_min_sp		Minimal among distances to species (not internal tree nodes)
+
+mut_list_Scer	List of all mutations with positions relative to Scer sequence.
+				First potitions of Scer sequence has index 1 - the same as in AA_vatiants.csv
 			
