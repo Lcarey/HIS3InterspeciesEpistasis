@@ -60,7 +60,8 @@ T = T( logical(T.lib) ,:);
 
 T = T( T.len == mode(T.len)  , :);
 
-T = T( logical(T.nat_lib) , :);
+T = T( logical(T.nat_lib) , :); % Nat-Lib
+%T = T( logical(T.lib) & ~logical(T.nat) , :);  %Lib (not extant)
 
 
 MapAA2I = containers.Map(  arrayfun(@(X){X},['A':'Z' '_' ])  , uint8(1:27) ) ; % all AAs + stop
@@ -83,9 +84,14 @@ T.aa_seq_varies = cellfun( @(X) X(cols_with_variation) , T.aa_seq,'UniformOutput
 %%
 
 T = T( : , {'aa_seq' 'aa_seq_varies'  's'});
+% % unfit given fit
+% fast_seqs =  find( T.s >=  fast_fit_cutoff ) ;
+% slow_seqs =  find( T.s <=  slow_fit_cutoff ) ;
 
-fast_seqs =  find( T.s >=  fast_fit_cutoff ) ;
-slow_seqs =  find( T.s <=  slow_fit_cutoff ) ;
+% % fit given unfit
+fast_seqs =  find( T.s <=  slow_fit_cutoff ) ;
+slow_seqs =  find( T.s >=  fast_fit_cutoff ) ;
+
 
 % choose N random pairs of fast sequences
 pairs = [ randsample(fast_seqs,N_Pairs_Fast_to_measure*10,true) randsample(fast_seqs,N_Pairs_Fast_to_measure*10,true)];
