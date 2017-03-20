@@ -12,6 +12,7 @@ addOptional(p,'ONLY_NATLIB_FLAG',1,@islogical)
 addOptional(p,'ONLY_LIB_FLAG',1,@islogical)
 addOptional(p,'NO_STOP_FLAG',1,@islogical)
 addOptional(p,'ParamID','XXXX',@ischar)
+addOptional(p,'KFOLD','10',@isnumeric)
 
 addOptional(p,'NO_SINGLES_FROM_ANY_OTHER',0,@islogical)
 
@@ -111,7 +112,7 @@ fitness_for_all_variants = ( T.s)'  ; % XDATA & function output have to be same 
 %% fit logistic model w/ cross-validation
 
 fit_opts = optimset( 'Diagnostics' , 'off' , 'Display' , 'off', 'PlotFcn' , [] ,'UseParallel' , false ) ;
-kfold = 10 ; 
+kfold = p.Results.KFOLD ; 
 Indices = crossvalind('Kfold', n_variants, kfold);
 R = dataset();
 R.fit_ddGvect = cell(kfold,1);
@@ -189,77 +190,5 @@ delete(  ['R_logistic_' output_file_basename '_' num2str(kfold) '.mat'] );
 save( ['R_logistic_' output_file_basename '.mat'] ,'R')
 
 
-% % % %% fit linear model w/ cross-validation
-% % % if RUN_LINEAR_FLAG
-% % % 
-% % % fit_opts = optimset( 'Diagnostics' , 'off' , 'Display' , 'off', 'PlotFcn' , [] ,'UseParallel' , false ) ;
-% % % 
-% % % deltaG_matrix_init = random('uniform',0,1,n_possible_aas,n_positions) ; % fitness defect caused by each AA at each position
-% % % deltaG_vect_init = deltaG_matrix_init(:);  % this is what we want to learn
-% % % 
-% % % %  init_x0_k_L_ddGvect = [0 0 0 deltaG_vect_init'] ; 
-% % % %  lb = zeros( size(init_x0_k_L_ddGvect));
-% % % %  ub = ones( size(init_x0_k_L_ddGvect));
-% % % %  ub(1:2) = 100 ;
-% % % %  ub(1:2) = -100 ;
-% % % 
-% % % Indices = crossvalind('Kfold', n_variants, 10);
-% % % R = dataset();
-% % % R.fit_ddGvect = cell(10,1);
-% % % R.Train = cell(10,1);
-% % % R.Test = cell(10,1);
-% % % R.train_rmse = NaN(10,1);
-% % % R.train_r2 = NaN(10,1) ;
-% % % R.test_rmse = NaN(10,1);
-% % % R.test_r2 = NaN(10,1) ;
-% % % R.runtime = R.test_r2 ; 
-% % % R.x0 = R.test_r2 ; 
-% % % R.k = R.test_r2 ; 
-% % % R.L = R.test_r2 ; 
-% % % R.FitOutputS = cell(10,1);
-% % % 
-% % % R.pred_fit_train = cell(10,1);
-% % % R.pred_fit_test = cell(10,1);
-% % % R.fit_train = cell(10,1);
-% % % R.fit_test = cell(10,1);
-% % % 
-% % % for I = 1:10
-% % %     R.Train{I} = find( Indices ~= I );
-% % %     R.Test{I} = find( Indices == I );
-% % % end
-% % % 
-% % % for I = 1:10
-% % %     fprintf(2,'.');
-% % %     tic; 
-% % %     aa = aa_for_all_variants( R.Train{I} , :);
-% % %     fit = fitness_for_all_variants(  R.Train{I} ) ; 
-% % %     [fit_x0_k_L_ddGvect , resnorm , residual , exitflag , output] = lsqcurvefit( @LinearFitnessDecayFunctionForOpt , init_x0_k_L_ddGvect , aa(:)  , fit , lb , ub , fit_opts ) ;
-% % %     R.FitOutputS{I} = output ;
-% % %     R.runtime(I) = toc; 
-% % %     R.fit_ddGvect{I} = fit_x0_k_L_ddGvect(4:end) ;
-% % %     R.x0(I) = fit_x0_k_L_ddGvect(1);
-% % %     R.k(I) = fit_x0_k_L_ddGvect(2);
-% % %     R.L(I) = fit_x0_k_L_ddGvect(3);
-% % % 
-% % %     pred_fit_train = LinearFitnessDecayFunctionForOpt( fit_x0_k_L_ddGvect , aa(:)  ) ; 
-% % %     [ R.train_r2(I) , R.train_rmse(I)] = rsquare( fit , pred_fit_train ) ; 
-% % % 
-% % %     aa_test = aa_for_all_variants( R.Test{I} , :);
-% % %     fit_test = fitness_for_all_variants(  R.Test{I} );
-% % %     pred_fit_test = LinearFitnessDecayFunctionForOpt( fit_x0_k_L_ddGvect , aa_test(:)  ) ; 
-% % %     [ R.test_r2(I) , R.test_rmse(I)] = rsquare( fit_test , pred_fit_test ) ;
-% % % 
-% % %     
-% % %     R.pred_fit_train{I} = pred_fit_train ; 
-% % %     R.pred_fit_test{I} = pred_fit_test ;
-% % %     R.fit_train{I} = fit ;
-% % %     R.fit_test{I} = fit_test ; 
-% % % 
-% % % 	fprintf(2,'%d\t%fsec\tR^2=%0.02f %0.02f\n' , I , R.runtime(I) ,R.test_r2(I),R.train_r2(I));
-% % % 	save( ['R_linear_' output_file_basename  '_' num2str(I)  '.mat'] ,'R')
-% % % end
-
-R
-save( ['R_linear_' output_file_basename '.mat'] ,'R' , 'T')
 
 end
