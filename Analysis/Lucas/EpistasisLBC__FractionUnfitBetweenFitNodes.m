@@ -86,12 +86,12 @@ T.aa_seq_varies = cellfun( @(X) X(cols_with_variation) , T.aa_seq,'UniformOutput
 
 T = T( : , {'aa_seq' 'aa_seq_varies'  's'});
 % % unfit given fit
-% fast_seqs =  find( T.s >=  fast_fit_cutoff ) ;
-% slow_seqs =  find( T.s <=  slow_fit_cutoff ) ;
+fast_seqs =  find( T.s >=  fast_fit_cutoff ) ;
+slow_seqs =  find( T.s <=  slow_fit_cutoff ) ;
 
 % % fit given unfit
-fast_seqs =  find( T.s <=  slow_fit_cutoff ) ;
-slow_seqs =  find( T.s >=  fast_fit_cutoff ) ;
+%fast_seqs =  find( T.s <=  slow_fit_cutoff ) ;
+%slow_seqs =  find( T.s >=  fast_fit_cutoff ) ;
 
 
 % choose N random pairs of fast sequences
