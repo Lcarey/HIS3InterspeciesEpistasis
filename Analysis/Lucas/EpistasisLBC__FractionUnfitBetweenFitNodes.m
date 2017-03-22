@@ -26,6 +26,7 @@ end
 
 base_file_name = regexp( fitness_file_csv , filesep , 'split')
 base_file_name = regexprep( base_file_name{end} , '\....' , '') ; 
+base_file_name = sprintf('%s__F=%0.02f_S=%0.02f__NP=%d' , base_file_name , fast_fit_cutoff , slow_fit_cutoff ,  N_Pairs_Fast_to_measure )
 
 %%
 figure; hold on; 
