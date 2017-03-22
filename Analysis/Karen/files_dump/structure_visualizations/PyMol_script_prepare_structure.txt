@@ -1,0 +1,16 @@
+bg_color white
+set surface_quality, 1
+set transparency, 0.5
+
+show cartoon, all
+hide lines, all
+
+select waters, name o
+hide everything, waters
+color white, all
+
+
+mset 1,180
+util.mroll 1, 180, 1
+set ray_trace_frames, 1
+set cache_frames, 0
