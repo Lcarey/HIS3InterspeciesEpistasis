@@ -37,5 +37,18 @@
 9.5		The resulting MSE
 9.6		R2 values for weights in different neurons of the first layer
 
+10.1		6 layers: 3 neurons -- Sigmoid, 100 neurons -- Sigmoid, 50 neurons -- Sigmoid, 10 neurons -- Sigmoid, 100 neurons -- Sigmoid, 1 neuron -- Sigmoid. Adagrad optimizer. Random, normally distributed initial weights.
+10.2		Loss function history (MSE)
+10.3		Fitness potential (weights[:,0]) vs. actual values. In blue (weights[:,0]), pink (weights[:,1]) and orange (weights[:,2]) the predicted values are plotted (and, therefore, the model being fitted).
+10.4		R2 values for actual vs predicted values
+10.5		The resulting MSE
+10.6		R2 values for weights in different neurons of the first layer
 
+11.1		3 layers: 100 neurons -- Sigmoid, 10 neurons -- Sigmoid, 1 neuron -- Sigmoid. Adagrad optimizer. Random, normally distributed initial weights.
+11.2		Loss function history (MSE)
+11.3		Fitness potential (weights[:,0]) vs. actual values. In blue (weights[:,0]), pink (weights[:,50]) and orange (weights[:,99]) the predicted values are plotted (and, therefore, the model being fitted).
+11.4		R2 values for actual vs predicted values
+11.5		The resulting MSE
+11.6		R2 values for weights in different neurons of the first layer
 
+12.1		3 layers: 1 neuron -- ReLU, 10 neurons -- ReLU, 1 neuron -- ReLU. Adagrad optimizer. Random, normally distributed initial weights. Fitness potential vs. actual values. In blue the predicted values are plotted (and, therefore, the model being fitted).
