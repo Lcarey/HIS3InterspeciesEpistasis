@@ -23,6 +23,8 @@
 7.3		Fitness potential vs. actual values. In blue the predicted values are plotted (and, therefore, the model being fitted).
 7.4		R2 values for actual vs predicted values
 7.5		The resulting MSE
+7.6		10-fold crossvalidation, R2 scores statistics
+7.7		2-fold crossvalidation, R2 scores statistics
 
 8.1		3 layers: 1 neuron -- TanH, 10 neurons -- TanH, 1 neuron -- TanH. Adagrad optimizer. Random, normally distributed initial weights.
 8.2		Loss function history (MSE)
