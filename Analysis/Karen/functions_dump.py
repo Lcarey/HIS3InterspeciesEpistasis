@@ -102,30 +102,6 @@ def save_image(image_counter, title, folder, prefix):
 
 
 
-def get_pymol_script_to_color_positions(positions, values=None, representation='spheres', colormap=mpl.cm.cool, constant_color=10):
-    if type(constant_color) == int or type(constant_color) == float:
-        color = colormap(constant_color)
-    elif type(constant_color) == str:
-        color = mpl.colors.hex2color(constant_color)
-    elif type(constant_color) == tuple:
-        color = constant_color
-    else:
-        print 'Weird color!'
-
-    if values != None:
-        values = 1. * np.array(values) / max(values)
-    for index, position in enumerate(positions):
-        if values != None: 
-            color=colormap(values[index])
-        colorName = "mCol" + str(position)
-        selName = "mSel" + str(position)
-        print '#' + str(position)
-        print "set_color " + colorName + " = " +str(color[0:3])
-        print "select " + selName +", resi " + str(int(position))
-        print "show " + representation + ", " + selName
-        print "color " + colorName + " ," + selName        
-
-
 def get_colors(number_of_colors, colormap):
     step = 255./(number_of_colors-1)
     return [colormap(int(i*step)) for i in range(number_of_colors)]
