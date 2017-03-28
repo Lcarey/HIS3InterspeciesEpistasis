@@ -4,6 +4,7 @@ import matplotlib.gridspec as gridspec
 import matplotlib.image as mpimg 
 mpl.rcParams['pdf.fonttype'] = 42
 import os
+import numpy as np
 
 def density_plot(x, y, nbins=42, log=False):
     mask = (~np.isnan(x)) & (~np.isnan(y))
@@ -98,4 +99,21 @@ class Counter:
 def save_image(image_counter, title, folder, prefix):
     figure_name = '%s_img%s_%s.png' %(prefix, image_counter.get_number(), '_'.join(title.split()))
     plt.savefig(os.path.join(folder, figure_name), dpi=300)
+
+
+
+def get_colors(number_of_colors, colormap):
+    step = 255./(number_of_colors-1)
+    return [colormap(int(i*step)) for i in range(number_of_colors)]
+
+
+def hex_to_rgb(value):
+    """Return (red, green, blue) for the color given as #rrggbb."""
+    value = value.lstrip('#')
+    lv = len(value)
+    return tuple(int(value[i:i + lv // 3], 16) for i in range(0, lv, lv // 3))
+
+def rgb_to_hex(red, green, blue):
+    """Return color as #rrggbb for the given color values."""
+    return '#%02x%02x%02x' % (red, green, blue)
 
