@@ -4,11 +4,12 @@ function s = EpistasisLBC__SynVariantsCAI(SegI)
 %% load data
 %%
 DataDir = '~/Develop/HIS3InterspeciesEpistasis/Data/Synonymous/';
-fns = dir( [DataDir filesep 'S*_sum_*fit.csv']);
+fns = dir( [DataDir filesep 'S*_sum_*fit.csv'])
+fns(SegI)
 %for SegI = 1:12
 metadata = regexp( fns(SegI).name , '_' ,'split');
 fns(SegI).segment = str2double(metadata{1}(2:end));
-T = readtable( [ fns(SegI).folder filesep fns(SegI).name ] );
+T = readtable( [ DataDir filesep fns(SegI).name ] );
 T = T( cellfun( @length , T.seq) ==  mode(cellfun( @length , T.seq)) , :); % only mode seq length
 T = T( ~isnan(T.s) , :);
 % Calc CAI / nTE , etc
@@ -68,6 +69,9 @@ fns(SegI).G = G ;
 SegI
 s = fns(SegI) ;
 save( sprintf('EpistasisLBC__SynVariantsCAI_%02d_%s.mat',SegI,char(datetime)),'s')
+
+T(1:10,:)
+G(1:10,:)
 %end
 % %% plot results
 % G.s = round(G.median_s*5)/5 ;
