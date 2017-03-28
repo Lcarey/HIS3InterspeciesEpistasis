@@ -1,4 +1,4 @@
-function T = EpistasisLBC__SynVariantsCAI(SegI)
+function s = EpistasisLBC__SynVariantsCAI(SegI)
 %% Do synonymous variants that differ by codon bias have different expression?
 %% EpistasisLBC__SynVariantsCAI.m
 %% load data
