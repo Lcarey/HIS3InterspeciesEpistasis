@@ -1,12 +1,16 @@
-function s = EpistasisLBC__SynVariantsCAI(SegI , remove_outliers_flag )
+function s = EpistasisLBC__SynVariantsCAI(SegI , remove_outliers_method,remove_outliers_value )
 %% Do synonymous variants that differ by codon bias have different expression?
 %% EpistasisLBC__SynVariantsCAI.m
 %% load data
 %%
 
-if ~exist('remove_outliers_flag','var')
-	remove_outliers_flag=true;
+if ~exist('remove_outliers_method','var')
+	remove_outliers_method='std';
 end
+if ~exist('remove_outliers_value','var')
+	remove_outliers_value=2;
+end
+
 
 DataDir = '~/Develop/HIS3InterspeciesEpistasis/Data/Synonymous/';
 fns = dir( [DataDir filesep 'S*_sum_*fit.csv'])
@@ -35,20 +39,32 @@ nTE_all = cell( height(G) , 1);
 tAI_all = cell( height(G) , 1);
 fit_all = cell( height(G) , 1);
 
+keep_rows_idx = true(height(G),1);
 for I = 1:height(G)
     idx = find(strcmp( D.aa_seq , G.aa_seq{I}));
     [s,o] = sort(D.s(idx)) ;
     nTE =  D.nTE(idx(o));
     tAI = D.tAI(idx(o));
 
-	if remove_outliers_flag
-		KeepIDX = s > ( median(s)-2*std(s)) & s < ( median(s)+2*std(s)) ;
+	if strcmp(remove_outliers_method,'std')
+		KeepIDX = s > ( median(s)-remove_outliers_value*std(s)) & s < ( median(s)+remove_outliers_value*std(s)) ;
+		s = s(KeepIDX);
+		nTE = nTE(KeepIDX);
+		tAI = tAI(KeepIDX);
+	elseif strcmp(remove_outliers_method,'abs')
+		KeepIDX = s > ( median(s)-remove_outliers_value) & s < ( median(s)+remove_outliers_value) ;
 		s = s(KeepIDX);
 		nTE = nTE(KeepIDX);
 		tAI = tAI(KeepIDX);
 	end
+    nTE_all{I} = nTE;
+    tAI_all{I} = tAI;
+    fit_all{I} = s;
 
-    
+	if numel(tAI)<2
+		keep_rows_idx(I)=false;
+	else
+
     if numel(tAI)>=6
         C(I,3) = log2( mean(nTE(end-2:end)) /  mean(nTE(1:3)) );
         C(I,6) = log2( mean(tAI(end-2:end)) /  mean(tAI(1:3)) );
@@ -58,10 +74,8 @@ for I = 1:height(G)
     
     [ C(I,1) , C(I,2) ] = corr(s,nTE) ;
     [ C(I,4) , C(I,5) ] = corr(s,tAI) ;
+	end
     
-    nTE_all{I} = nTE;
-    tAI_all{I} = tAI;
-    fit_all{I} = s;
 end
 G.nTE_C = C(:,1);
 G.nTE_P = C(:,2);
@@ -76,6 +90,7 @@ G.tAI_all = tAI_all ;
 G.fit_all = fit_all ;
 G.nTE_all = nTE_all ;
 G.segment = repmat( uint8(fns(SegI).segment) , height(G) , 1);
+G = G( keep_rows_idx , :);
 fprintf('Calc corr took %0.01f sec\n' , toc);
 
 fns(SegI).T = T ;
@@ -84,7 +99,9 @@ fns(SegI).G = G ;
 SegI
 s = fns(SegI) ;
 s.source_file_name = source_file_name ;
-save( sprintf('EpistasisLBC__SynVariantsCAI_%02d_%s.mat',SegI,char(datetime)),'s')
+s.remove_outliers_method = remove_outliers_method ; 
+s.remove_outliers_value  = remove_outliers_value ;
+save( sprintf('EpistasisLBC__SynVariantsCAI_%02d_%s.mat',fns(SegI).segment,char(datetime)),'s')
 
 T(1:10,:)
 G(1:10,:)
