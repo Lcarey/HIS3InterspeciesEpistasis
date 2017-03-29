@@ -1,15 +1,21 @@
-function s = EpistasisLBC__SynVariantsCAI(SegI)
+function s = EpistasisLBC__SynVariantsCAI(SegI , remove_outliers_flag )
 %% Do synonymous variants that differ by codon bias have different expression?
 %% EpistasisLBC__SynVariantsCAI.m
 %% load data
 %%
+
+if ~exist('remove_outliers_flag','var')
+	remove_outliers_flag=true;
+end
+
 DataDir = '~/Develop/HIS3InterspeciesEpistasis/Data/Synonymous/';
 fns = dir( [DataDir filesep 'S*_sum_*fit.csv'])
 fns(SegI)
 %for SegI = 1:12
 metadata = regexp( fns(SegI).name , '_' ,'split');
 fns(SegI).segment = str2double(metadata{1}(2:end));
-T = readtable( [ DataDir filesep fns(SegI).name ] );
+source_file_name = [ DataDir filesep fns(SegI).name ] ;
+T = readtable( source_file_name );
 T = T( cellfun( @length , T.seq) ==  mode(cellfun( @length , T.seq)) , :); % only mode seq length
 T = T( ~isnan(T.s) , :);
 % Calc CAI / nTE , etc
@@ -34,6 +40,14 @@ for I = 1:height(G)
     [s,o] = sort(D.s(idx)) ;
     nTE =  D.nTE(idx(o));
     tAI = D.tAI(idx(o));
+
+	if remove_outliers_flag
+		KeepIDX = s > ( median(s)-2*std(s)) & s < ( median(s)+2*std(s)) ;
+		s = s(KeepIDX);
+		nTE = nTE(KeepIDX);
+		tAI = tAI(KeepIDX);
+	end
+
     
     if numel(tAI)>=6
         C(I,3) = log2( mean(nTE(end-2:end)) /  mean(nTE(1:3)) );
@@ -61,6 +75,7 @@ G.tAI_l2_1 = C(:,8);
 G.tAI_all = tAI_all ;
 G.fit_all = fit_all ;
 G.nTE_all = nTE_all ;
+G.segment = repmat( uint8(fns(SegI).segment) , height(G) , 1);
 fprintf('Calc corr took %0.01f sec\n' , toc);
 
 fns(SegI).T = T ;
@@ -68,76 +83,9 @@ fns(SegI).G = G ;
 
 SegI
 s = fns(SegI) ;
+s.source_file_name = source_file_name ;
 save( sprintf('EpistasisLBC__SynVariantsCAI_%02d_%s.mat',SegI,char(datetime)),'s')
 
 T(1:10,:)
 G(1:10,:)
-%end
-% %% plot results
-% G.s = round(G.median_s*5)/5 ;
-% MS = 0;
-% N = 20 ;
-% min_syn_vars_for_plotting = MS ;
-% Q = G( G.GroupCount>=min_syn_vars_for_plotting,:);
-% %       Q = Q( Q.nTE_P<0.05 | Q.tAI_P<0.05 ,:);
-% [Y,E] = discretize(Q.median_s , N);
-% Q.s = Y;
-%
-%
-% figure;
-% subplot(2,2,1)
-% boxplot( Q.nTE_C , Q.s ,'notch','on');line(xlim,[0 0]);
-% ylabel('nTE')
-% ylim([-0.5 0.5]); set(gca,'ytick',-1:.1:1);grid on;
-% xlabel('Measured fitness')
-%
-% subplot(2,2,2)
-% boxplot( Q.nTE_l2 , Q.s ,'notch','on');line(xlim,[0 0]);
-% ylabel('nTE log2(FIT/unfit)')
-% ylim([-0.1 0.1]); set(gca,'ytick',-1:.1:1);grid on;
-% xlabel('Measured fitness')
-%
-% subplot(2,2,3)
-% boxplot( Q.tAI_C , Q.s ,'notch','on');line(xlim,[0 0]);
-% ylabel('tAI')
-% ylim([-0.5 0.5]); set(gca,'ytick',-1:.1:1);grid on;
-% xlabel('Measured fitness')
-%
-% subplot(2,2,4)
-% boxplot( Q.tAI_l2 , Q.s ,'notch','on');line(xlim,[0 0]);
-% ylabel('tAI log2(FIT/unfit)')
-% ylim([-0.1 0.1]); set(gca,'ytick',-1:.1:1);grid on;
-% xlabel('Measured fitness')
-%
-% %%
-%
-% for MS = 0
-%     figname = sprintf('SynVarParSearch_%d.eps' ,MS);
-%     delete(figname);
-%     for N = 20
-%
-%         min_syn_vars_for_plotting = MS ;
-%         Q = G( G.GroupCount>=min_syn_vars_for_plotting,:);
-%         %    Q = Q( Q.nTE_P<0.05 | Q.tAI_P<0.05 ,:);
-%         [Y,E] = discretize(Q.median_s , N);
-%         Q.s = Y ;
-%         GG = grpstats( Q ,'s' ,{'mean'  'median' 'std'} , 'DataVars' ,{'median_s' 'nTE_C' 'tAI_C' 'nTE_l2' 'tAI_l2'});
-%         GG = GG(GG.GroupCount>1,:);
-%         figure; hold on ;
-%         plot(  GG.median_median_s , GG.median_nTE_C ,'.-','DisplayName','nTE C');
-%         plot(  GG.median_median_s , GG.median_tAI_C ,'.-','DisplayName','tAI C');
-%         ylim([0 0.2])
-%         legend('location','best')
-%         set(gca,'ytick',-1:0.01:1)
-%         grid on ;
-%         title( sprintf( 'MS=%d N=%d' , MS , N));
-%         xlim([-1.8 0.75])
-%         set(gca,'xtick',-5:0.2:5);
-%         %  print('-dpsc2', figname,'-append');
-%         %   close;
-%
-%     end
-% end
-%
-%
-%
+
