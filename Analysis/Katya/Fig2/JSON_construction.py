@@ -9,7 +9,6 @@ from matplotlib import pyplot as plt
 import os
 import distance
 import json
-get_ipython().magic(u'matplotlib inline')
 pd.set_option('display.max_columns', 100)
 
 
@@ -29,7 +28,7 @@ for f in os.listdir('/home/katya/local/HIS3InterspeciesEpistasis/Data/'):
 positions = pd.DataFrame.from_csv('/home/katya/local/HIS3InterspeciesEpistasis/Data_Small_Tables/positions.csv', sep = '\t')
 
 for chunk in clean_data:
-    print chunk
+    print (chunk)
     sqs = list(clean_data[chunk].index)
     
     for ind in range(len(sqs)):
@@ -46,8 +45,8 @@ for chunk in clean_data:
     
     done = []
     for i1 in range(len(sqs)):
-        if i1%10000 == 1:
-            print i1
+        if i1%1000 == 0:
+            print (i1)
         done.append(sqs[i1])
         for i2 in range(len(sqs)):
             if sqs[i2] not in done and clean_data[chunk].dist_Scer[i1]!=clean_data[chunk].dist_Scer[i2]             and distance.hamming(sqs[i1],sqs[i2]) == 1:
