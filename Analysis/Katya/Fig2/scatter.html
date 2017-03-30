@@ -1,0 +1,36 @@
+<!doctype html>
+<meta charset="utf-8">
+
+<script src="//d3plus.org/js/d3.js"></script>
+<script src="//d3plus.org/js/d3plus.js"></script>
+<div id="viz"></div>
+
+<script>
+
+function make_viz(data){
+  var visualization = d3plus.viz()
+  .container("#viz")  // container DIV to hold the visualization
+  .data({'value':data, 'opacity':0.05})  // data to use with the visualization
+  .type("scatter")    // visualization type
+  .id(["name",'y'])         // key for which our data is unique on
+  .color({primary: "#00AEEF", 'value':function(d){
+    return 'black'
+  }})
+  .x({'value':"x",'label':'Hamming distance to Scerevisia'})         // key for x-axis
+  .y({'value':function(d){
+    return d.y*(-1)/10
+  }, 'label':'Fitness'})
+  .labels(false)
+  .size(5)
+  .tooltip({"vale":'y'})
+  .draw()
+}
+
+
+d3.json("data/S1.json", function(error, data) {
+  if (error) throw error;
+
+  make_viz(data.nodes);
+});
+
+</script>
