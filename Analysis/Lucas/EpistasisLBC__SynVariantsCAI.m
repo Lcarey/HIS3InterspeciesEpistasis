@@ -4,6 +4,7 @@ function s = EpistasisLBC__SynVariantsCAI(SegI , remove_outliers_method,remove_o
 %% load data
 %%
 
+function_start_time = char(datetime) ;
 if ~exist('remove_outliers_method','var')
 	remove_outliers_method='std';
 end
@@ -19,6 +20,10 @@ fns(SegI)
 metadata = regexp( fns(SegI).name , '_' ,'split');
 fns(SegI).segment = str2double(metadata{1}(2:end));
 source_file_name = [ DataDir filesep fns(SegI).name ] ;
+
+
+output_mat_file_name  = sprintf('SynVariantsCAI_%02d_%s%d_%s.mat' , fns(SegI).segment , remove_outliers_method , remove_outliers_value ,  function_start_time)
+
 T = readtable( source_file_name );
 T = T( cellfun( @length , T.seq) ==  mode(cellfun( @length , T.seq)) , :); % only mode seq length
 T = T( ~isnan(T.s) , :);
@@ -101,7 +106,7 @@ s = fns(SegI) ;
 s.source_file_name = source_file_name ;
 s.remove_outliers_method = remove_outliers_method ; 
 s.remove_outliers_value  = remove_outliers_value ;
-save( sprintf('EpistasisLBC__SynVariantsCAI_%02d_%s.mat',fns(SegI).segment,char(datetime)),'s')
+save( output_mat_file_name , 's' ) ;
 
 T(1:10,:)
 G(1:10,:)
