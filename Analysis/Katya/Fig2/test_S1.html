@@ -13,7 +13,7 @@ function make_viz(data){
     .type("network")
     .data({'value':data, 'opacity':0.2})
     .nodes(data.nodes)
-    .edges({'value':data.connections, 'opacity':0.3})
+    .edges({'value':data.connections, 'opacity':0.2})
     .size(0.03)
     .id("name")
     .format({"text": function(text, params) {
