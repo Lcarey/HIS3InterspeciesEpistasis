@@ -69,7 +69,7 @@ end
 T.columns_that_vary = repmat( uint8(find(columns_that_vary)) , height(T) , 1) ; 
 
 
-%%  there are VERY few seqs that are 0 away from any other
+%%  there are VERY few seqs that are 1 away from any other
 if p.Results.NO_SINGLES_FROM_ANY_OTHER
     T.aa_seq_variable_numeric = NaN( height(T) , numel(T.aa_seq_variable{1}));
     for I = 1:height(T)
