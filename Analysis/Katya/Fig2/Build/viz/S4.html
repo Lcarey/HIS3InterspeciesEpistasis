@@ -1,0 +1,58 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>S4</title>
+<link rel="stylesheet" href="../css/menu.css">
+<script src="//d3plus.org/js/d3.js"></script>
+<script src="//d3plus.org/js/d3plus.js"></script>
+<!-- <input type="button" onclick="location.href='../index.html';" value="Back" /> -->
+
+<head>
+
+  <div class="topnav" id="myTopnav">
+    <a href="../index.html">Home</a>
+    <a href="S12.html">S12</a>
+    <a href="S11.html">S11</a>
+    <a href="S10.html">S10</a>
+    <a href="S9.html">S9</a>
+    <a href="S8.html">S8</a>
+    <a href="S7.html">S7</a>
+    <a href="S6.html">S6</a>
+    <a href="S5.html">S5</a>
+    <a href="S4.html">S4</a>
+    <a href="S3.html">S3</a>
+    <a href="S2.html">S2</a>
+    <a href="S1.html">S1</a>
+  </div>
+
+<body>
+<div id="viz" style="height: 800px; margin-left: 50px; margin-top: 10px; margin-bottom: 10px"></div>
+<script>
+
+function make_viz(data){
+  var visualization = d3plus.viz()
+    .container("#viz")
+    .width(1300)
+    // .height(900)
+    .color({primary: "black", 'value':function(d){
+      return 'black'
+    }})
+    .type("network")
+    .data({'value':data, 'opacity':0.1})
+    .nodes(data.nodes)
+    .edges({'value':data.connections, 'opacity':0.3, 'color': function(d){
+      return d.color;
+    }})
+    .size(0.02)
+    .id("name")
+    .labels(false)
+
+    .draw()
+}
+
+d3.json("../data/S4.json", function(error, data) {
+  if (error) throw error;
+  make_viz(data);
+});
+
+</script>
+</body>
