@@ -59,6 +59,9 @@
 13.2		Fitness potential (weights[:,0]) vs. actual values. In blue (weights[:,0]) and pink (weights[:,50]) the predicted values are plotted (and, therefore, the model being fitted).
 13.3		R2 values for weights in different neurons of the first layer
 
+14.1-14.12		Weights assigned to different mutations within the first 2 neurons (2-... architecture) and within the first 1 neuron (1-... architecture) for chunks 1-12, correspondingly
 
+15.1		Mutations, having opposite signs within 2 entrance neurons, according to >5 iterations of a 10-fold cross validation
+15.2		Such (15.1) mutations within S5, two halves coloured differently, together with a ligand (in orange)  
 
 
