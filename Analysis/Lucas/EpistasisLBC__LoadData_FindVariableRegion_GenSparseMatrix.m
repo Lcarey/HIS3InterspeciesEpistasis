@@ -10,39 +10,32 @@ function T  = EpistasisLBC__LoadData_FindVariableRegion_GenSparseMatrix( data_fi
 if ~exist('varargin','var');varargin={};end;
 p = inputParser;
 addRequired(p,'data_file_name');
-addOptional(p,'N_variants_to_fit',999999999,@isnumeric)
-addOptional(p,'RUN_LINEAR_FLAG',0,@islogical)
 addOptional(p,'ONLY_NATLIB_FLAG',1,@islogical)
 addOptional(p,'ONLY_LIB_FLAG',1,@islogical)
+addOptional(p,'ONLY_MIDDLE_FLAG',1,@islogical)
 addOptional(p,'NO_STOP_FLAG',1,@islogical)
-addOptional(p,'ParamID','XXXX',@ischar)
 
 
 parse(p,data_file_name,varargin{:});
 
 MapAA2I = containers.Map(  arrayfun(@(X){X},['A':'Z' '_' ])  , 1:27 ) ; % all AAs + stop
 
-
-%% setup paths
-addpath(genpath('~/Develop/matlab/'));
-addpath(genpath('~/Develop/Matlab/'));
-addpath(genpath('~/Develop/HIS3InterspeciesEpistasis/'));
-
-
 % if numel(gcp('nocreate'))==0 , 	parpool local , end
 %% load data
 % data_file_name can be a segment # or file name
 DataDir = '~/Develop/HIS3InterspeciesEpistasis/Data/';
 if isnumeric(data_file_name)
-    data_file_name = [ 'S' num2str(data_file_name) '_scaled_info.csv'];
+    data_file_name = [ num2str(data_file_name) '.tab'];
 end
-T = readtable([ DataDir data_file_name ] );
+% format = 
+%  aa_seq	s	len	nogap	stop	middle	nat_lib	nat	lib	size
+T = readtable([ DataDir data_file_name ] , 'Format' , '%s%f%d%d%d%d%d%d%d%d%d' ,'FileType','text','Delimiter','\t');
 
 T = T( logical(T.nogap)  , :) ; % can't handle seq's w/varying length
 T = T( T.len == mode(T.len) , :); % can't handle seq's w/varying length
 
 if p.Results.NO_STOP_FLAG
-    T = T( T.middle & T.nogap & ~T.stop & ~T.nonsense , :) ;
+    T = T(T.nogap & ~T.stop & ~T.nonsense , :) ;
 end
 if p.Results.ONLY_NATLIB_FLAG
     T = T( logical(T.nat_lib) , :);
@@ -50,7 +43,13 @@ end
 if p.Results.ONLY_LIB_FLAG
     T = T( logical(T.lib) , :);
 end
+if p.Results.ONLY_MIDDLE_FLAG
+    T = T( logical(T.middle) , :);
+end
 
+T.nogap = [];
+T.stop = [];
+T.nonsense = [];
 
 
 %% shrink sequences down to the variable part
@@ -77,30 +76,3 @@ end
 
 end
 
-%% edit distance between all pairs matrix
-%  hamming_distance_matrix = squareform(pdist( cell2mat(T.aa_seq_variable) , 'hamming')) * n_positions ; 
-%%
-%% Distance matrix == work in progress
-% % % 
-% % % 
-% % % 
-% % % %% compare to WT seqs
-% % % WT = readtable('~/Develop/HIS3InterspeciesEpistasis/Data_Small_Tables/wt_seq.csv');
-% % % 
-% % % 
-% % % WT_seq = WT.aa_seq{ strcmp(WT.Var1,regexprep(data_file_name,'_.*',''))} ;
-% % % WT_seq_varies = WT_seq(columns_that_vary) ;
-% % % 
-% % % R = dataset();
-% % % R.matricies = {'BLOSUM30' 'BLOSUM40' 'BLOSUM50' 'BLOSUM62' 'BLOSUM70' 'BLOSUM80' 'BLOSUM90' 'BLOSUM100'...
-% % %      'PAM30' 'PAM40' 'PAM50' 'PAM60' 'PAM70' 'PAM80' 'PAM90' ...
-% % %     'DAYHOFF' 'GONNET'}' ;
-% % % R.corrs = NaN( numel(R.matricies),1);
-% % % 
-% % % for J = 1:numel(R.matricies)
-% % %     tic;
-% % %     mat = R.matricies{J} ; %much faster
-% % %     scores = cellfun( @(I) swalign( WT_seq_varies , I , 'Alphabet', 'AA' , 'ScoringMatrix' ,mat) , T.aa_seq_variable );
-% % %     R.corrs(J) =  corr(scores,T.s);
-% % %     fprintf('%s\t%s\t%0.03f\t%0.2f\n' , data_file_name , R.matricies{J}, R.corrs(J) , toc );
-% % % end

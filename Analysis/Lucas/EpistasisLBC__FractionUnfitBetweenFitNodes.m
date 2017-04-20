@@ -1,68 +1,26 @@
-function [ R  , T ] = EpistasisLBC__FractionUnfitBetweenFitNodes( fitness_file_csv  , N_Pairs_Fast_to_measure , fast_fit_cutoff ,  slow_fit_cutoff )
+function [ R  , T ] = EpistasisLBC__FractionUnfitBetweenFitNodes( SegN  , N_Pairs_Fast_to_measure , fast_fit_cutoff ,  slow_fit_cutoff )
 %%  [ R , T ] = EpistasisLBC__FractionUnfitBetweenFitNodes( fitness_file_csv  , N_Pairs_Fast_to_measure , fast_fit_cutoff ,  slow_fit_cutoff )
 %
 %
 % LBC 2017
 %% load data
 DataDir = '~/Develop/HIS3InterspeciesEpistasis/Data/';
-
-if isnumeric(fitness_file_csv)
-    fitness_file_csv = sprintf('S%d_scaled_info.csv',fitness_file_csv) ;
-    T = readtable([ DataDir filesep  fitness_file_csv ]) ;
-elseif exist( fitness_file_csv , 'file')
-    T = readtable(fitness_file_csv) ;
-elseif exist( [ DataDir filesep fitness_file_csv ] , 'file')
-    T = readtable([ DataDir filesep fitness_file_csv ]) ;
-else
-   error([ 'Cant find ' fitness_file_csv]);
-end
+T = readtable([ DataDir filesep num2str(SegN) '.tab' ],'FileType','text') ;
 
 if ~exist('fast_fit_cutoff','var')
     fast_fit_cutoff = 0.4 ; 
 end
 if ~exist('slow_fit_cutoff','var')
-    slow_fit_cutoff = 0.25  ; 
+    slow_fit_cutoff = 0.2  ; 
 end
 
-base_file_name = regexp( fitness_file_csv , filesep , 'split')
-base_file_name = regexprep( base_file_name{end} , '\....' , '') ; 
-base_file_name = sprintf('%s__F=%0.02f_S=%0.02f__NP=%d' , base_file_name , fast_fit_cutoff , slow_fit_cutoff ,  N_Pairs_Fast_to_measure )
-
-%%
-figure; hold on; 
-ecdf(T.s);
-ecdf(T.s(logical(T.stop)));
-ecdf(T.s(~logical(T.stop)));
-ecdf(T.s(~logical(T.stop) & logical(T.nat)))
-ecdf(T.s(~logical(T.stop) & logical(T.lib)))
-ecdf(T.s(~logical(T.stop) & logical(T.nat_lib)))
-ecdf(T.s(~logical(T.stop) & logical(T.nat_lib) & logical(T.middle)) );
-xlabel('Fitness')
-set(gca,'xtick',0:.05:1)
-grid on ;
-set(gca,'ytick',0:.1:1)
-legend({'All' '+stop' '-stop' '-stop nat'  '-stop lib'  '-stop nat-lib' '-stop nat-lib & middle' } ,'location','best');
-xlim([0 0.55])
-
-line([fast_fit_cutoff fast_fit_cutoff],ylim,'LineStyle','--','Color','k')
-line([slow_fit_cutoff slow_fit_cutoff],ylim,'LineStyle','--','Color','k')
-
-title(base_file_name)
-
-set(gcf,'PaperPosition',[0 0 5 5])
-print('-dpng', [ base_file_name '_dist.png'] , '-r300');
-close; 
 
 %% Must remove stop codons for results to work!
 T = T( ~logical(T.stop) & ~logical(T.nonsense)  ,:);
 T = T( logical(T.middle) ,:);
 T = T( logical(T.lib) ,:);
-
-
 T = T( T.len == mode(T.len)  , :);
-
 T = T( logical(T.nat_lib) , :); % Nat-Lib
-%T = T( logical(T.lib) & ~logical(T.nat) , :);  %Lib (not extant)
 
 
 MapAA2I = containers.Map(  arrayfun(@(X){X},['A':'Z' '_' ])  , uint8(1:27) ) ; % all AAs + stop
@@ -82,16 +40,9 @@ cols_with_variation = arrayfun( @(I)sum(n_aa_per_col(:,I)>1) , 1:size(n_aa_per_c
 %variation_in_seq_mat = mean(aa_num_mat == aa_num{1} ) ~= 1    ; % these are the columns for which the AA seqs are not all exactly the same
 
 T.aa_seq_varies = cellfun( @(X) X(cols_with_variation) , T.aa_seq,'UniformOutput',false); 
-%%
-
-T = T( : , {'aa_seq' 'aa_seq_varies'  's'});
-% % unfit given fit
+%%  % % unfit given fit
 fast_seqs =  find( T.s >=  fast_fit_cutoff ) ;
 slow_seqs =  find( T.s <=  slow_fit_cutoff ) ;
-
-% % fit given unfit
-%fast_seqs =  find( T.s <=  slow_fit_cutoff ) ;
-%slow_seqs =  find( T.s >=  fast_fit_cutoff ) ;
 
 
 % choose N random pairs of fast sequences
@@ -135,9 +86,9 @@ for I = 1:N_Pairs_Fast_to_measure
  
     R.HammingDistances(I) = HammingDistance( seq1 , seq2 ) ;
     R.StatesMeasured(I) = numel(idx)  ;
-    if (mod(I,20)==0) , fprintf('.') , end;
-    if (mod(I,100)==0) , fprintf(' ') , end;
-    if (mod(I,1000)==0) , fprintf(' %0.0f%%\n',I/N_Pairs_Fast_to_measure*100) , end;
+    if (mod(I,20)==0) , fprintf('.') , end 
+    if (mod(I,100)==0) , fprintf(' ') , end 
+    if (mod(I,1000)==0) , fprintf(' %0.0f%%\n',I/N_Pairs_Fast_to_measure*100) , end 
 end
 toc
 R.pct_unfit  = ( R.NUnfitMeasured ) ./ R.StatesMeasured * 100 ; 

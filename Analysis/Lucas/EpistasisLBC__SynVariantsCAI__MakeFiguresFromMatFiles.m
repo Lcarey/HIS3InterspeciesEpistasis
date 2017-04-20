@@ -2,7 +2,7 @@
 
 %% load mat files from cluster
 %  EpistasisLBC__SynVariantsCAI()
-MATDIR = 'outliersfilt_1std/';
+MATDIR = 'outliersfilt_99/';
 matfiles = dir( [MATDIR 'SynVariantsCAI_*.mat']);
 for I = 1:numel(matfiles)
     load( [MATDIR matfiles(I).name] );
@@ -167,3 +167,15 @@ R.max_fit = v_max_fit' ;
 R.min_fit = v_min_fit' ;
 R.N = v_N';
 
+%% show where the intermediate fitness values are: 
+figure; hold on; 
+clrs = parula(7);
+for I = 7:12
+    [f,x]=ecdf(matfiles(I).G.median_s);
+    plot(x,f,'-','LineWidth',2,'DisplayName', num2str(matfiles(I).LibN),'Color',clrs(I-5,:));
+end
+xlim([-1.5 1.5]);
+grid on ;
+xlabel('Fitness')
+ylabel('Fraction of genotypes')
+legend('location','best')
