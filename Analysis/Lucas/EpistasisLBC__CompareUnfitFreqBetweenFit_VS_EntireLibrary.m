@@ -1,5 +1,5 @@
-function s = EpistasisLBC__CompareUnfitFreqBetweenFit_VS_EntireLibrary(   SegRange , N_Pairs_Fast_to_measure )
-%%  s = EpistasisLBC__CompareUnfitFreqBetweenFit_VS_EntireLibrary( SegRange  , N_Pairs_Fast_to_measure )
+function s = EpistasisLBC__CompareUnfitFreqBetweenFit_VS_EntireLibrary(   SegRange , N_Pairs_Fast_to_measure , save_struct_file_name )
+%%  s = EpistasisLBC__CompareUnfitFreqBetweenFit_VS_EntireLibrary( SegRange  , N_Pairs_Fast_to_measure , save_struct_file_name )
 %
 %
 % LBC 2017
@@ -19,6 +19,7 @@ end
 if ~exist('N_Pairs_Fast_to_measure','var')
     N_Pairs_Fast_to_measure = 1000 ; 
 end
+
 
 MapAA2I = containers.Map(  arrayfun(@(X){X},['A':'Z' '_' ])  , uint8(1:27) ) ; % all AAs + stop
 
@@ -114,3 +115,9 @@ for SegN = SegRange
     s(thisone).R = R ;
 end
 
+% optionally save the structure
+if exist('save_struct_file_name','var')
+    save(save_struct_file_name , 's');
+end
+
+end
