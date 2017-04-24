@@ -15,6 +15,7 @@ syndata:
 	echo 'SegN\tseq\taa_seq\ts\tt0_fr' > syndata.tab
 	grep -v aa_seq x >> syndata.tab
 	rm -f x
+	mv syndata.tab synonymous_variants_rescaled_data.tab
 
 
 
