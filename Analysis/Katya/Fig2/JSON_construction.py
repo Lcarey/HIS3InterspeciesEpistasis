@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[78]:
 
 import pandas as pd
 import numpy as np
@@ -10,29 +10,47 @@ import os
 import distance
 from multiprocessing import Pool
 import json
+from bisect import bisect_left
+# %matplotlib inline
+pd.set_option('display.max_columns', 100)
 
 
-# In[68]:
+# In[201]:
 
 chunks = ['S'+str(i) for i in range(1,13)]
 data = {}
 clean_data = {}
 
-for f in os.listdir('/users/fk/eputintseva/projects/HIS/Data/'):
+for f in os.listdir('/home/katya/start/HIS3InterspeciesEpistasis/Data/'):
     if 'csv' in f:
-        data[f[:-16]] = pd.DataFrame.from_csv('/users/fk/eputintseva/projects/HIS/Data/' + f, sep = '\t')
-        clean_data[f[:-16]] = data[f[:-16]][(data[f[:-16]].nonsense == 0) & (data[f[:-16]].middle == 1)]        
+        data[f[:-16]] = pd.DataFrame.from_csv('/home/katya/start/HIS3InterspeciesEpistasis/Data/' + f, sep = '\t')
+        clean_data[f[:-16]] = data[f[:-16]][(data[f[:-16]].nonsense == 0) & (data[f[:-16]].middle == 1)]
+        clean_data[f[:-16]] = clean_data[f[:-16]].sample(6000)
 
 
-# In[69]:
+# In[202]:
+
+color_dict={}
+color_dict[11] = '#00AEE9'
+color_dict[10] = '#34ADD3'
+color_dict[9] = '#70ADC7'
+color_dict[8] = '#70ADC7'
+color_dict[7] = '#70ADC7'
+color_dict[6] = '#9AABB4'
+color_dict[5] = '#9AABB4'
+color_dict[4] = '#A7A9AC'
+color_dict[3] = '#A7A9AC'
+color_dict[2] = '#A7A9AC'
+color_dict[1] = '#A7A9AC'
+
+
+# In[203]:
 
 def write_json(chunk):
     print chunk
     
-    fitness_threshold_1 = 0.8*clean_data[chunk].s.max()
-    fitness_threshold_2 = 0.6*clean_data[chunk].s.max()
-    fitness_threshold_3 = 0.4*clean_data[chunk].s.max()
-    fitness_threshold_4 = 0.2*clean_data[chunk].s.max()
+    fitThres = [0.45*(10-i)*0.1 for i in range(11)]
+    fitThres.sort()
     
     sqs = list(clean_data[chunk].index)
     
@@ -55,30 +73,21 @@ def write_json(chunk):
         for i2 in range(len(sqs)):
             if sqs[i2] not in done and clean_data[chunk].dist_Scer[i1]!=clean_data[chunk].dist_Scer[i2]             and distance.hamming(sqs[i1],sqs[i2]) == 1:
                 
-                if clean_data[chunk].s[i1]>=fitness_threshold_1 and clean_data[chunk].s[i2]>=fitness_threshold_1:
-                    data['connections'].append({'source':data['nodes'][i1]['name'], 'target':data['nodes'][i2]['name'], 'color':'#00AEE9'})
-                
-                elif clean_data[chunk].s[i1]>=fitness_threshold_2 and clean_data[chunk].s[i2]>=fitness_threshold_2:
-                    data['connections'].append({'source':data['nodes'][i1]['name'], 'target':data['nodes'][i2]['name'], 'color':'#34ADD3'})
-                
-                elif clean_data[chunk].s[i1]>=fitness_threshold_3 and clean_data[chunk].s[i2]>=fitness_threshold_3:
-                    data['connections'].append({'source':data['nodes'][i1]['name'], 'target':data['nodes'][i2]['name'], 'color':'#70ADC7'})
-                
-                elif clean_data[chunk].s[i1]>=fitness_threshold_4 and clean_data[chunk].s[i2]>=fitness_threshold_4:
-                    data['connections'].append({'source':data['nodes'][i1]['name'], 'target':data['nodes'][i2]['name'], 'color':'#9AABB4'})
-                
-                else:
-                    data['connections'].append({'source':data['nodes'][i1]['name'], 'target':data['nodes'][i2]['name'], 'color':'#A7A9AC'})
-                
-    with open('/users/fk/eputintseva/projects/HIS/Fig2/Build/data/' + chunk + '.json', 'w+') as outfile:  
+                minimum = min(clean_data[chunk].s[i1], clean_data[chunk].s[i2])
+                ind = np.searchsorted(fitThres, minimum, side='right')
+                data['connections'].append({'source':data['nodes'][i1]['name'], 'target':data['nodes'][i2]['name'], 'color':color_dict[ind], 'min':minimum})
+                   
+    with open('/home/katya/start/HIS3InterspeciesEpistasis/Analysis/Katya/Fig2/Build/data/' + chunk + '.json', 'w+') as outfile:  
         json.dump(data, outfile)
 
 
-# In[1]:
+# In[204]:
 
 pool = Pool()
 pool.map(write_json, chunks)
 
+
+# ***
 
 # In[ ]:
 
