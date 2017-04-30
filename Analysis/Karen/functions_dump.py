@@ -6,6 +6,8 @@ mpl.rcParams['pdf.fonttype'] = 42
 import os
 import numpy as np
 from IPython.html.widgets.widget_float import FloatProgress
+from IPython.display import display
+import pandas as pd
 
 def density_plot(x, y, nbins=42, log=False):
     mask = (~np.isnan(x)) & (~np.isnan(y))
@@ -137,14 +139,6 @@ def get_wt_mutA_mutB(mut_combination, mutA, mutB):
     mutB_combination = ':'.join([m for m in mut_combination if m != mutB])
     return wild_type_combination, mutA_combination, mutB_combination
 
-def foursome_epistasis(panel, wt_mut_combination):
-    panel_slice = panel.major_xs(wt_mut_combination).loc['s']
-    wt_fitness = panel_slice['wild_type']
-    mutA_fitness = panel_slice['mutA']
-    mutB_fitness = panel_slice['mutB']
-    mutAB_fitness = panel_slice['mutAB']
-    return epistasis([mutA_fitness, mutB_fitness], mutAB_fitness, wt_fitness=wt_fitness)
-
 
 def get_foursomes(df_with_aaMutations_as_index, mutA, mutB):
     
@@ -178,7 +172,7 @@ def get_foursomes_for_every_pair(df_with_aaMutations_as_index, mut_combinations,
         foursome = get_foursomes(df_with_aaMutations_as_index, mutA, mutB)
         if len(foursome.major_axis) > 0:
             fn = prefix + 'foursome_mutA_%s_mutB_%s.hdf' %(mutA, mutB)
-            foursome.to_hdf(folder_to_save + fn, 'data')
+            foursome.to_hdf(os.path.join(folder_to_save, fn), 'data')
         f.value += 1
 
 
@@ -207,3 +201,28 @@ def get_mutation_in_all_backgrounds(df, mutation, lowest_acceptable_fitness=None
 def get_fitness_impacts_in_all_backgrounds(df, mutation, lowest_acceptable_fitness=None):
     panel = get_mutation_in_all_backgrounds(df, mutation, lowest_acceptable_fitness=lowest_acceptable_fitness)
     return panel['mutA']['s'] - panel['wild_type']['s']
+
+
+def consists_of_known_mutations(mutations, list_of_known_singles):
+    for mutation in mutations.split(':'):
+        if not mutation in list_of_known_singles:
+            return False
+    return True
+
+def find_genotypes_containing_mutations(df, mutations):
+    if type(mutations) == str:
+        mutations = mutations.split(':')
+    for m in mutations:
+        df = df[df.mut_list_Scer.apply(lambda comb: contains_mutation(comb, m))]
+    return df
+
+def find_genotype(df, mutations_as_string):
+    masked = df[df.mut_list_Scer == mutations_as_string]
+    assert len(masked) < 2
+    if len(masked) == 1:
+        return masked
+    else:
+        return None
+    
+def contains_mutation(mutations, mutation):
+    return mutation in mutations.split(':')
