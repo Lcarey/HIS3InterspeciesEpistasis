@@ -5,6 +5,7 @@ import matplotlib.image as mpimg
 mpl.rcParams['pdf.fonttype'] = 42
 import os
 import numpy as np
+from IPython.html.widgets.widget_float import FloatProgress
 
 def density_plot(x, y, nbins=42, log=False):
     mask = (~np.isnan(x)) & (~np.isnan(y))
@@ -117,3 +118,92 @@ def rgb_to_hex(red, green, blue):
     """Return color as #rrggbb for the given color values."""
     return '#%02x%02x%02x' % (red, green, blue)
 
+
+
+
+# # # # # # # # # # # # 
+
+def get_AB(mut_combination, mutA, mutB):
+    mut_combination = mut_combination.split(':')
+    mut_combination.extend([mutA, mutB])
+    mut_combination = list(set(mut_combination))
+    mut_combination = sorted(mut_combination, key=lambda m: int(m[:-1]))
+    return ':'.join(mut_combination)
+
+def get_wt_mutA_mutB(mut_combination, mutA, mutB):
+    mut_combination = mut_combination.split(':')
+    wild_type_combination = ':'.join([m for m in mut_combination if m != mutA and m != mutB])
+    mutA_combination = ':'.join([m for m in mut_combination if m != mutA])
+    mutB_combination = ':'.join([m for m in mut_combination if m != mutB])
+    return wild_type_combination, mutA_combination, mutB_combination
+
+def foursome_epistasis(panel, wt_mut_combination):
+    panel_slice = panel.major_xs(wt_mut_combination).loc['s']
+    wt_fitness = panel_slice['wild_type']
+    mutA_fitness = panel_slice['mutA']
+    mutB_fitness = panel_slice['mutB']
+    mutAB_fitness = panel_slice['mutAB']
+    return epistasis([mutA_fitness, mutB_fitness], mutAB_fitness, wt_fitness=wt_fitness)
+
+
+def get_foursomes(df_with_aaMutations_as_index, mutA, mutB):
+    
+    contains_A = find_genotypes_containing_mutations(df_with_aaMutations_as_index, [mutA])
+    contains_B = find_genotypes_containing_mutations(df_with_aaMutations_as_index, [mutB])
+    contains_AB = find_genotypes_containing_mutations(df_with_aaMutations_as_index, [mutA, mutB])
+
+    if min([len(contains_A), len(contains_B), len(contains_AB)]) < 10:
+        return pd.Panel()
+    
+    contains_A = contains_A[~contains_A.mut_list_Scer.apply(lambda s: contains_mutation(s, mutB))]
+    contains_B = contains_B[~contains_B.mut_list_Scer.apply(lambda s: contains_mutation(s, mutA))]
+    
+    contains_A['wt'] = contains_A.mut_list_Scer.apply(lambda mut_combination: get_wt_mutA_mutB(mut_combination, mutA, mutB)[0])
+    contains_B['wt'] = contains_B.mut_list_Scer.apply(lambda mut_combination: get_wt_mutA_mutB(mut_combination, mutA, mutB)[0])
+    contains_AB['wt'] = contains_AB.mut_list_Scer.apply(lambda mut_combination: get_wt_mutA_mutB(mut_combination, mutA, mutB)[0])
+    
+    contains_A.set_index('wt', inplace=True)
+    contains_B.set_index('wt', inplace=True)
+    contains_AB.set_index('wt', inplace=True)
+
+    foursome = pd.Panel.from_dict({'wild_type':df_with_aaMutations_as_index.set_index('wt'), 
+                                   'mutA':contains_A, 'mutB':contains_B, 'mutAB':contains_AB}, intersect=True)
+    return foursome
+
+
+def get_foursomes_for_every_pair(df_with_aaMutations_as_index, mut_combinations, prefix, folder_to_save):
+    f = FloatProgress(min=0, max=len(mut_combinations)+1)
+    display(f)
+    for mutA, mutB in mut_combinations:  
+        foursome = get_foursomes(df_with_aaMutations_as_index, mutA, mutB)
+        if len(foursome.major_axis) > 0:
+            fn = prefix + 'foursome_mutA_%s_mutB_%s.hdf' %(mutA, mutB)
+            foursome.to_hdf(folder_to_save + fn, 'data')
+        f.value += 1
+
+
+def remove_mutation_from_combination(mut_combination, mutation):
+    return ':'.join([m for m in mut_combination.split(':') if m != mutation])
+
+
+
+def check_dir(directory):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    return directory
+
+
+
+def get_mutation_in_all_backgrounds(df, mutation, lowest_acceptable_fitness=None):
+    containing_mutation = find_genotypes_containing_mutations(df, mutation).copy()
+    containing_mutation['wt'] = containing_mutation['mut_list_Scer'].apply(lambda mut_combination: remove_mutation_from_combination(mut_combination, mutation))
+    containing_mutation.set_index('wt', inplace=True)
+
+    if lowest_acceptable_fitness:
+        df = df[df['s'] >= lowest_acceptable_fitness]
+    panel = pd.Panel.from_dict({'wild_type':df.set_index('wt'), 'mutA':containing_mutation}, intersect=True)
+    return panel
+
+def get_fitness_impacts_in_all_backgrounds(df, mutation, lowest_acceptable_fitness=None):
+    panel = get_mutation_in_all_backgrounds(df, mutation, lowest_acceptable_fitness=lowest_acceptable_fitness)
+    return panel['mutA']['s'] - panel['wild_type']['s']
