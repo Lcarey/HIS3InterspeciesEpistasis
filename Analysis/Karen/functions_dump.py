@@ -226,3 +226,88 @@ def find_genotype(df, mutations_as_string):
     
 def contains_mutation(mutations, mutation):
     return mutation in mutations.split(':')
+
+
+
+
+# # # # # # PyMol # # # # # # # #
+
+import pymol
+from pymol import cmd, stored
+import matplotlib
+from matplotlib import cm
+
+
+def open_or_fetch(PDB_ID_or_filename, object_name=None):
+    if len(PDB_ID_or_filename) in [4,5] and '.' not in PDB_ID_or_filename:
+        cmd.fetch(PDB_ID_or_filename, async=0)
+    else:
+        if not object_name:
+            object_name = PDB_ID_or_filename
+        cmd.load(PDB_ID_or_filename, object_name)
+        
+def save_session(filename_pse='test.pse', pymol_viewer_version='1.72'):
+    cmd.set('pse_export_version', pymol_viewer_version)
+    cmd.save(filename_pse)
+
+def white_and_beautiful(representation='cartoon'):
+    cmd.hide('lines', 'all')
+    cmd.show(representation, 'all')
+    cmd.select('waters', 'name o')
+    cmd.hide('everything', 'waters')
+    cmd.color('gray90', 'all')
+    cmd.set('bg_rgb', '(1,1,1)')
+    cmd.set('surface_quality', '1')
+    cmd.set('transparency', '0.5')
+    cmd.set('ray_opaque_background', 'off')
+
+    
+def prepare_GFP_2WUR():
+    cmd.fetch('2WUR', async=0)
+    white_and_beautiful()
+    cmd.select('waters', 'name o')
+    cmd.select('chr', 'resn GYS')
+    cmd.select('aa_64_68', 'resi 64+68')
+    cmd.select('aa_64_68_mainchain', 'aa_64_68 and name C+CO+CA+N')
+    cmd.hide('everything', 'waters')
+    cmd.show('sticks', 'chr')
+    cmd.color('green', 'chr')
+    cmd.show('sticks', 'aa_64_68_mainchain')
+    
+def color_positions(positions, values=None, representation='spheres', colormap=matplotlib.cm.cool, constant_color=120):
+    # only positive values
+    assert min(values) >= 0
+    if type(constant_color) == int or type(constant_color) == float:
+        color = colormap(constant_color)
+    elif type(constant_color) == str:
+        color = mpl.colors.hex2color(constant_color)
+    elif type(constant_color) == tuple:
+        color = constant_color
+    else:
+        print 'Weird color!'
+
+    if str(values) != 'None':
+        values = np.array(values) - min(values)
+        values = 1. * values / max(values)
+    for index, position in enumerate(positions):
+        if str(values) != 'None':
+            color=colormap(values[index])
+        colorName = "color_" + str(position)
+        selName = "temp_selection"
+        cmd.set_color(colorName, color[0:3])
+        cmd.select(selName, 'resi %s' %position)
+        cmd.show(representation, selName)
+        cmd.color(colorName, selName)
+        
+def get_residues_from_selection(selection_name, only_numbers=True):
+    stored.list=[]
+    if only_numbers:
+        cmd.iterate("(%s & n. ca)" %selection_name, "stored.list.append(resi)")
+        return [int(resi) for resi in stored.list]
+    else:
+        cmd.iterate("(%s & n. ca)" %selection_name, "stored.list.append((resi, resn))")
+        return [(int(resi), resn) for resi, resn in stored.list]
+    
+def save_session_properly(session_counter, title, folder, prefix):
+    session_name = '%s_pse%s_%s.pse' %(prefix, image_counter.get_number(), '_'.join(title.split()))
+    save_session(os.path.join(folder, session_name))
