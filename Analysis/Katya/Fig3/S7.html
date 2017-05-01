@@ -1,91 +1,120 @@
-<!DOCTYPE html>
+<!doctype html>
 <meta charset="utf-8">
-<style>
+<title>S7</title>
+<link rel="stylesheet" href="../css/menu.css">
+<script src="//d3plus.org/js/d3.js"></script>
+<script src="//d3plus.org/js/d3plus.js"></script>
+<!-- <input type="button" onclick="location.href='../index.html';" value="Back" /> -->
 
-.links line {
-  stroke: #999;
-  stroke-opacity: 0.6;
-}
-
-.nodes circle {
-  stroke: #fff;
-  stroke-width: 1.5px;
-}
-
-</style>
-<svg width="960" height="600"></svg>
-<script src="https://d3js.org/d3.v4.min.js"></script>
+<body>
+<div id="viz" style="height: 800px; margin-left: 50px; margin-top: 10px; margin-bottom: 10px"></div>
 <script>
-
-var svg = d3.select("svg"),
-    width = +svg.attr("width"),
-    height = +svg.attr("height");
-
-var color = d3.scaleOrdinal(d3.schemeCategory20);
-
-var simulation = d3.forceSimulation()
-    .force("link", d3.forceLink().id(function(d) { return d.id; }))
-    .force("charge", d3.forceManyBody())
-    .force("center", d3.forceCenter(width / 2, height / 2));
-
-d3.json("data/S7.json", function(error, graph) {
-  if (error) throw error;
-
-  var link = svg.append("g")
-      .attr("class", "connections")
-    .selectAll("line")
-    .data(graph.links)
-    .enter().append("line");
-
-  var node = svg.append("g")
-      .attr("class", "nodes")
-    .selectAll("circle")
-    .data(graph.nodes)
-    .enter().append("circle")
-      .attr("r", 5)
-      .call(d3.drag()
-          .on("start", dragstarted)
-          .on("drag", dragged)
-          .on("end", dragended));
-
-  node.append("title")
-      .text(function(d) { return d.name; });
-
-  simulation
-      .nodes(graph.nodes)
-      .on("tick", ticked);
-
-  simulation.force("link")
-      .links(graph.connections);
-
-  function ticked() {
-    link
-        .attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
-
-    node
-        .attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; });
-  }
-});
-
-function dragstarted(d) {
-  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-  d.fx = d.x;
-  d.fy = d.y;
+var data = {
+  "connections": [
+    {"source": "23", "type": 0, "target": "Ylip"},
+    {"source": "23", "type": 0, "target": "Anid"},
+    {"source": "23", "type": 0, "target": "24"},
+    {"source": "24", "type": 0, "target": "40"},
+    {"source": "24", "type": 0, "target": "25"},
+    {"source": "40", "type": 0, "target": "Sjap"},
+    {"source": "40", "type": 0, "target": "41"},
+    {"source": "41", "type": 0, "target": "Soct"},
+    {"source": "41", "type": 0, "target": "Spom"},
+    {"source": "25", "type": 0, "target": "Ncra"},
+    {"source": "25", "type": 0, "target": "26"},
+    {"source": "26", "type": 0, "target": "Agos"},
+    {"source": "26", "type": 0, "target": "27"},
+    {"source": "27", "type": 0, "target": "Cgla"},
+    {"source": "27", "type": 0, "target": "28"},
+    {"source": "28", "type": 0, "target": "29"},
+    {"source": "28", "type": 0, "target": "34"},
+    {"source": "34", "type": 0, "target": "Cgui"},
+    {"source": "34", "type": 0, "target": "35"},
+    {"source": "35", "type": 0, "target": "36"},
+    {"source": "35", "type": 0, "target": "37"},
+    {"source": "36", "type": 0, "target": "Clus"},
+    {"source": "36", "type": 0, "target": "Dhan"},
+    {"source": "37", "type": 0, "target": "38"},
+    {"source": "37", "type": 0, "target": "39"},
+    {"source": "38", "type": 0, "target": "Calb"},
+    {"source": "38", "type": 0, "target": "Ctro"},
+    {"source": "39", "type": 0, "target": "Cpar"},
+    {"source": "39", "type": 0, "target": "Lelo"},
+    {"source": "29", "type": 0, "target": "30"},
+    {"source": "29", "type": 0, "target": "32"},
+    {"source": "30", "type": 0, "target": "Scas"},
+    {"source": "30", "type": 0, "target": "31"},
+    {"source": "31", "type": 0, "target": "Scer"},
+    {"source": "31", "type": 0, "target": "Sbay"},
+    {"source": "32", "type": 0, "target": "Klac"},
+    {"source": "32", "type": 0, "target": "33"},
+    {"source": "33", "type": 0, "target": "Kwal"},
+    {"source": "33", "type": 0, "target": "Sklu"}
+    ],
+  "nodes": [
+      {"type": 0, "id": "Agos", "fitness": 0.453710588235},
+      {"type": 0, "id": "Anid", "fitness": 0.44047952847499994},
+      {"type": 0, "id": "Calb", "fitness": 0.44778483468},
+      {"type": 0, "id": "Cgla", "fitness": 0.45982096593000005},
+      {"type": 0, "id": "Cgui", "fitness": 0.45616023360299995},
+      {"type": 0, "id": "Clus", "fitness": 0.45379639439099995},
+      {"type": 0, "id": "Cpar", "fitness": 0.45379639439099995},
+      {"type": 0, "id": "Ctro", "fitness": 0.44778483468},
+      {"type": 0, "id": "Dhan", "fitness": 0.452793369842},
+      {"type": 0, "id": "Klac", "fitness": 0.453710588235},
+      {"type": 0, "id": "Kwal", "fitness": 0.453710588235},
+      {"type": 0, "id": "Lelo", "fitness": 0.45379639439099995},
+      {"type": 0, "id": "Ncra", "fitness": 0.450234811868},
+      {"type": 0, "id": "Scas", "fitness": 0.459666682806},
+      {"type": 0, "id": "Scer", "fitness": 0.453710588235},
+      {"type": 0, "id": "Sjap", "fitness": 0.125815827995},
+      {"type": 0, "id": "Sklu", "fitness": 0.453710588235},
+      {"type": 0, "id": "Soct", "fitness": 0.125815827995},
+      {"type": 0, "id": "Ylip", "fitness": 0.455144033583},
+      {"type": 0, "id": "23", "fitness": 0.452793369842},
+      {"type": 0, "id": "24", "fitness": 0.452793369842},
+      {"type": 0, "id": "25", "fitness": 0.452793369842},
+      {"type": 0, "id": "26", "fitness": 0.452793369842},
+      {"type": 0, "id": "27", "fitness": 0.452793369842},
+      {"type": 0, "id": "28", "fitness": 0.452793369842},
+      {"type": 0, "id": "29", "fitness": 0.453710588235},
+      {"type": 0, "id": "30", "fitness": 0.453710588235},
+      {"type": 0, "id": "31", "fitness": 0.453710588235},
+      {"type": 0, "id": "32", "fitness": 0.453710588235},
+      {"type": 0, "id": "33", "fitness": 0.453710588235},
+      {"type": 0, "id": "34", "fitness": 0.452793369842},
+      {"type": 0, "id": "35", "fitness": 0.452793369842},
+      {"type": 0, "id": "36", "fitness": 0.452793369842},
+      {"type": 0, "id": "37", "fitness": 0.452793369842},
+      {"type": 0, "id": "38", "fitness": 0.44778483468},
+      {"type": 0, "id": "39", "fitness": 0.45379639439099995},
+      {"type": 0, "id": "40", "fitness": 0.125815827995},
+      {"type": 0, "id": "41", "fitness": 0.125815827995}
+      ]
 }
 
-function dragged(d) {
-  d.fx = d3.event.x;
-  d.fy = d3.event.y;
+function make_viz(data){
+  var visualization = d3plus.viz()
+    .container("#viz")
+    .width(1300)
+    // .height(900)
+    .color({primary: "black", 'value':function(d){
+      return 'black'
+    }})
+    .type("network")
+    .data({'value':data, 'opacity':0.1})
+    .nodes(data.nodes)
+    .edges({'value':data.connections, 'opacity':0.3, 'color': function(d){
+      return d.color;
+    }})
+    .size(0.02)
+    .id("name")
+    .labels(false)
+    .draw()
 }
 
-function dragended(d) {
-  if (!d3.event.active) simulation.alphaTarget(0);
-  d.fx = null;
-  d.fy = null;
-}
+make_viz(data);
+
 
 </script>
+</body>
