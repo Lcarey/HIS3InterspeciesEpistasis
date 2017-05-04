@@ -1,19 +1,27 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<style>
+<title>S1</title>
+<link rel="stylesheet" href="../css/menu.css">
 
-.links line {
-  stroke: #aaa;
-}
+<head>
+  <div class="topnav" id="myTopnav">
+    <a href="../index.html">Home</a>
+    <a href="S12.html">S12</a>
+    <a href="S11.html">S11</a>
+    <a href="S10.html">S10</a>
+    <a href="S9.html">S9</a>
+    <a href="S8.html">S8</a>
+    <a href="S7.html">S7</a>
+    <a href="S6.html">S6</a>
+    <a href="S5.html">S5</a>
+    <a href="S4.html">S4</a>
+    <a href="S3.html">S3</a>
+    <a href="S2.html">S2</a>
+    <a href="S1.html">S1</a>
+  </div>
+</head>
 
-.nodes circle {
-  pointer-events: all;
-  stroke: none;
-  stroke-width: 40px;
-}
-
-</style>
-<svg width="3000" height="2000"></svg>
+<svg width="1500" height="1000"></svg>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 
@@ -26,7 +34,7 @@ var simulation = d3.forceSimulation()
     .force("charge", d3.forceManyBody().strength(-1))
     .force("center", d3.forceCenter(width / 2, height / 2));
 
-d3.json("S2.json", function(error, graph) {
+d3.json("../data/S2.json", function(error, graph) {
   if (error) throw error;
 
   var link = svg.append("g")
