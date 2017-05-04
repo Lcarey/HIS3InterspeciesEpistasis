@@ -34,8 +34,10 @@ end
 R.MajorSignFitEffectSize(R.HasMajorSignFitEffect) = R.FitImpact(R.HasMajorSignFitEffect) ;
 R.MinorSignFitEffectSize(R.HasMinorSignFitEffect) = R.FitImpact(R.HasMinorSignFitEffect) ;
 
-G = grpstats( R , {'VarPos' 'Perm'} , {'mean' 'sum'} ,'DataVars' , { 'MinorSignFitEffect' 'MajorSignFitEffect' 'MajorSignFitEffectSize' 'MinorSignFitEffectSize' }) ;
-
+G = grpstats( R , {'VarPos' 'Perm'} , {'mean' 'sum'} ,'DataVars' , { 'MajorSignFitEffectSize' 'MinorSignFitEffectSize' 'HasMinorSignFitEffect' 'HasMajorSignFitEffect' 'FitImpact' 'Fit1' 'Fit2'}) ;
+G.sum_Fit2 = [] ; 
+G.sum_Fit1 = [] ;
+G.sum_FitImpact = [] ;
 
 %% predict
 
@@ -44,12 +46,17 @@ G.ValidationAcc_weighted = NaN(length(G),1);
 G.ValidationAcc_noweights = NaN(length(G),1);
 G.AUC_weighted = NaN(length(G),1);
 G.AUC_noweights = NaN(length(G),1);
-G.Classifier_weighted = cell(length(G),1);
-G.Classifier_noweights = cell(length(G),1);
+G.FitImpact = cell(length(G),1);
+G.Seq1 = cell(length(G),1);
+
+%G.Classifier_weighted = cell(length(G),1);
+%G.Classifier_noweights = cell(length(G),1);
 
 % run predictor for all substuttions w/enought minor effect backgrounds
-for GI = find( G.sum_MinorSignFitEffect >  min_N_minor_on_which_to_predict )'
+for GI = find( G.sum_HasMinorSignFitEffect >  min_N_minor_on_which_to_predict )'
     Q = R( R.VarPos==G.VarPos(GI) & strcmp(R.Perm,G.Perm{GI}),:);
+    G.FitImpact{GI} = Q.FitImpact ;
+	G.Seq1{GI} = Q.Seq1 ; 
     % generate sparsevect for prediction
     SparseVect = cell( length(Q.Seq1) , 1);
     seq_length = length(Q.Seq1{1});
@@ -61,12 +68,12 @@ for GI = find( G.sum_MinorSignFitEffect >  min_N_minor_on_which_to_predict )'
     for I = 1:length(Q.Seq1)
         SparseVect{I} = ismember(unique_variants , a(I,:))'  ;
     end
-    idx_to_classify = Q.MajorSignFitEffect | Q.MinorSignFitEffect ;
+    idx_to_classify = Q.HasMinorSignFitEffect | Q.HasMajorSignFitEffect ;
     W = ones( length(Q) , 1) ;
     X = double(cell2mat(SparseVect)) ;
     X = X(idx_to_classify,:);
-    Y = Q.MinorSignFitEffect(idx_to_classify) ;
-    W(Q.MinorSignFitEffect) = sum(Q.MajorSignFitEffect)/sum(Q.MinorSignFitEffect) ;
+    Y = Q.HasMinorSignFitEffect(idx_to_classify) ;
+    W(Q.HasMinorSignFitEffect) = sum(Q.HasMajorSignFitEffect)/sum(Q.HasMinorSignFitEffect) ;
     W = W(idx_to_classify);
     classificationKNN = fitcknn( X , Y , 'Weights' , W ,   ...
         'Distance', 'Hamming', ...
@@ -85,7 +92,7 @@ for GI = find( G.sum_MinorSignFitEffect >  min_N_minor_on_which_to_predict )'
     
     G.ValidationAcc_weighted(GI) = validationAccuracy  ;
     G.AUC_weighted(GI) = AUC ;
-    G.Classifier_weighted{GI} = partitionedModel  ;
+%    G.Classifier_weighted{GI} = partitionedModel  ;
     
     
     % w/out weights
@@ -104,7 +111,7 @@ for GI = find( G.sum_MinorSignFitEffect >  min_N_minor_on_which_to_predict )'
     
     G.ValidationAcc_noweights(GI) = validationAccuracy  ;
     G.AUC_noweights(GI) = AUC ;
-    G.Classifier_noweights{GI} = partitionedModel  ;
+  %  G.Classifier_noweights{GI} = partitionedModel  ;
     
 end
 

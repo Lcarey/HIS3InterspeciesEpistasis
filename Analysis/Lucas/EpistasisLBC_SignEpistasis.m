@@ -1,13 +1,14 @@
 %% build R
 s = struct();
 for SegN = 1:12
+    tic;
     % natlib
     T  = EpistasisLBC__LoadData( SegN  ,'ONLY_NATLIB_FLAG',true, 'ONLY_MIDDLE_FLAG',true,'NO_STOP_FLAG',true);
     
     %everything. basically the same result
     % T  = EpistasisLBC__LoadData( I  ,'ONLY_NATLIB_FLAG',false, 'ONLY_MIDDLE_FLAG',false,'NO_STOP_FLAG',true);
     
-    T  = EpistasisLBC__FindVariableRegion_GenSparseMatrix( T ) ;
+  %  T  = EpistasisLBC__FindVariableRegion_GenSparseMatrix( T ) ;
     
     fitness = T.s ;
     aaseqs = T.aa_seq  ;
@@ -69,22 +70,21 @@ for SegN = 1:12
     R = R( 1:(c-1) , :);
     
     R.FitImpact = R.Fit1 - R.Fit2 ;
-    R.FitImpactThreshGood2 = (R.Fit1 - R.Fit2) >= 0.2   ;
-    R.FitImpactThreshBad2  = (R.Fit1 - R.Fit2) <= -0.2   ;
-    R.FitImpactThreshGood3 = (R.Fit1 - R.Fit2) >= 0.3   ;
-    R.FitImpactThreshBad3  = (R.Fit1 - R.Fit2) <= -0.3   ;
     
-    
+    fprintf('Seg %d took %0.01f min\n' , SegN , toc/60) ;
+	s(SegN).R = R ; 
+	save('~/Desktop/HIS3scratch/SignEpi/SignEpi_Ronly.mat' , 's');
 end
 
 
 %% Fit to model ;
-load('~/Desktop/HIS3scratch/SignEpi/SignEpiWithKNNModel.mat');
+% load('~/Desktop/HIS3scratch/SignEpi/SignEpi_Ronly.mat');
 %% find sign epi
 for SegN = 1:12
     SegN
-    [ G , ~]  = SignEpistasisFitModelToR( s(SegN).R , 0.2 , 50 ) ;
+    [ G , ~]  = SignEpistasisFitModelToR( s(SegN).R , 0.1 , 10 ) ;
     G.Properties.ObsNames = [] ; 
+    G.SegN = repmat( SegN , length(G) , 1);
     if SegN==1
         BigG = G;
     else
@@ -92,31 +92,19 @@ for SegN = 1:12
     end
 end
 
-save('~/Desktop/HIS3scratch/SignEpi/SignEpiWithKNNModel_BigG.mat' , 'BigG' );
+save('~/Desktop/HIS3scratch/SignEpi/SignEpi_KNN_01.mat' , 'BigG' );
 
-%% how common is sign epi? 
-N=50;
-BigG.HasEnoughBigEffects = BigG.sum_MinorSignFitEffect > 2*N | BigG.sum_MajorSignFitEffect > 2*N ;
-BigG.HasSignEpiByCount   = BigG.sum_MinorSignFitEffect > N & BigG.sum_MajorSignFitEffect > N ;
-BigG.HasSignEpiByAUC     = BigG.AUC_noweights > 0.6   ;
-BigG.HasSignEpiByCountAndAUC = BigG.HasSignEpiByCount & BigG.HasSignEpiByAUC ; 
+%% find sign epi
+for SegN = 1:12
+    SegN
+    [ G , ~]  = SignEpistasisFitModelToR( s(SegN).R , 0.2 , 10 ) ;
+    G.Properties.ObsNames = [] ; 
+    G.SegN = repmat( SegN , length(G) , 1);
+    if SegN==1
+        BigG = G;
+    else
+        BigG = vertcat(BigG,G);
+    end
+end
 
-fprintf('All subs = %d\n' , length(BigG))
-fprintf('enough w/big effectsd = %d (%0.02f%%)\n' , sum(BigG.HasEnoughBigEffects) ,  100*sum(BigG.HasEnoughBigEffects)/length(BigG))
-fprintf('enough w/both signs = %d (%0.02f%%)\n' , sum(BigG.HasSignEpiByCount), 100*sum(BigG.HasSignEpiByCount)/length(BigG))
-fprintf('pass AUC = %d (%0.02f%%)\n' , sum(BigG.HasSignEpiByAUC), 100*sum(BigG.HasSignEpiByAUC)/length(BigG))
-fprintf('pass AUC & enough w/both signs = %d (%0.02f%%)\n' , sum(BigG.HasSignEpiByCountAndAUC), 100*sum(BigG.HasSignEpiByCountAndAUC)/length(BigG))
-
-%%
-fh = figure('units','centimeters','position',[5 5 7 7]);
-hold on; 
-histogram( 100*BigG.mean_MinorSignFitEffect( BigG.HasSignEpiByCountAndAUC  ) , 10 ,'Normalization','Count','EdgeColor','k','FaceColor','k')
-xlabel('% of genontypes with minor sign')
-ylabel('# of substitutions')
-axis tight ;
-xlim([0 004.4])
-set(gca,'xtick',0:1:100)
-print('-dpsc2','SignEpistasis.eps','-append')
-close ;
-
-%%
+save('~/Desktop/HIS3scratch/SignEpi/SignEpi_KNN_02.mat' , 'BigG' );
