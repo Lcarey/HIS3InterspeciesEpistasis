@@ -8,6 +8,7 @@ import numpy as np
 from IPython.html.widgets.widget_float import FloatProgress
 from IPython.display import display
 import pandas as pd
+from scipy import stats
 
 def density_plot(x, y, nbins=42, log=False):
     mask = (~np.isnan(x)) & (~np.isnan(y))
@@ -309,5 +310,22 @@ def get_residues_from_selection(selection_name, only_numbers=True):
         return [(int(resi), resn) for resi, resn in stored.list]
     
 def save_session_properly(session_counter, title, folder, prefix):
-    session_name = '%s_pse%s_%s.pse' %(prefix, image_counter.get_number(), '_'.join(title.split()))
+    session_name = '%s_pse%s_%s.pse' %(prefix, session_counter.get_number(), '_'.join(title.split()))
     save_session(os.path.join(folder, session_name))
+
+
+
+# # # # # # # # # # # # 
+
+def plot_segment_positions(ax, scale=1):
+    old_y = 2*scale
+    for row in positions.iterrows():
+        for position in row[1].positions_Uniprot_P06633:
+            new_y = np.random.choice([1*scale, 2*scale])
+            while new_y == old_y:
+                new_y = np.random.choice([1*scale, 2*scale])
+        x = row[1].positions_Uniprot_P06633
+        plt.plot(x, [new_y for e in x], '.', lw=3, alpha=0.7, 
+            label=row[1].segment, color=segment_colors[row[1].segment])
+        plt.text(np.median(x), new_y + 2*scale, row[1].segment)
+        old_y = new_y
