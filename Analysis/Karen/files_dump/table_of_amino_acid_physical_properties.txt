@@ -1,0 +1,21 @@
+Amino Acid	Code	Hydropathy	Charge	pKa, NH2	pKa, COOH	pK(R)	Solubility
+Arginine	R	hydrophilic	+	9.09	2.18	13.2	71.8
+Asparagine	N	hydrophilic	N	8.8	2.02	 	2.4
+Aspartate	D	hydrophilic	-	9.6	1.88	3.65	0.42
+Glutamate	E	hydrophilic	-	9.67	2.19	4.25	0.72
+Glutamine	Q	hydrophilic	N	9.13	2.17	 	2.6
+Lysine	K	hydrophilic	+	10.28	8.9	2.2	 
+Serine	S	hydrophilic	N	9.15	2.21	 	36.2
+Threonine	T	hydrophilic	N	9.12	2.15	 	freely
+Cysteine	C	moderate	N	10.78	1.71	8.33	freely
+Histidine	H	moderate	+	8.97	1.78	6	4.19
+Methionine	M	moderate	N	9.21	2.28	 	5.14
+Alanine	A	hydrophobic	N	9.87	2.35	 	15.8
+Valine	V	hydrophobic	N	9.72	2.29	 	5.6
+Glycine	G	hydrophobic	N	9.6	2.34	 	22.5
+Isoleucine	I	hydrophobic	N	9.76	2.32	 	3.36
+Leucine	L	hydrophobic	N	9.6	2.36	 	2.37
+Phenylalanine	F	hydrophobic	N	9.24	2.58	 	2.7
+Proline	P	hydrophobic	N	10.6	1.99	 	1.54
+Tryptophan	W	hydrophobic	N	9.39	2.38	 	1.06
+Tyrosine	Y	hydrophobic	N	9.11	2.2	10.1	0.038
