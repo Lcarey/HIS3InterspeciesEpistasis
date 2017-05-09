@@ -1,4 +1,4 @@
-Amino acid residue;pKa of ionizing side chaina;Average residue mass (daltons);Monoisotopic mass (daltons);Occurrence in proteins, %;Percent buried residues;Average volume of buried residues, A3;Van der Waals volume, A3;;Accessible  surface area. A2;;Ranking of amino acid polarities
+Amino acid residue;pKa of ionizing side chaina;Average residue mass (daltons);Monoisotopic mass (daltons);Occurrence in proteins, %;Percent buried residues;Average volume of buried residues, A3;Van der Waals volume, A3;;Accessible surface area, A2;;Ranking of amino acid polarities
 Alanine;-;71.0788;71.03711;7.5;38 (12);92;67;;67;;9 (7)
 Arginine;12.5 (>12);156.1876;156.10111;5.2;0 (0);225;148;;196;;15 (19)
 Asparagine;-;114.1039;114.04293;4.6;10 (2);135;96;;113;;16 (16)
