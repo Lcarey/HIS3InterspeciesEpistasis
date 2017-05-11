@@ -1,4 +1,4 @@
-function [ T  columns_that_vary uniq_aas ] = EpistasisLBC__ShortedAAseqsOnlyPositionsThatVary( T )
+function [ aa_seq_variable ,   columns_that_vary ,  uniq_aas ] = EpistasisLBC__ShortedAAseqsOnlyPositionsThatVary( T )
 %% [ T  columns_that_vary uniq_aas ] = EpistasisLBC__ShortedAAseqsOnlyPositionsThatVary( T )
 % 
 % given  a table already read in
@@ -25,6 +25,6 @@ for I = 1:numel(columns_that_vary)
     end
 end
 
-T.aa_seq_variable = cellfun( @(X)X(columns_that_vary) , T.aa_seq  , 'UniformOutput' , false ) ; 
+aa_seq_variable = cellfun( @(X)X(columns_that_vary) , T.aa_seq  , 'UniformOutput' , false ) ; 
 
 end
