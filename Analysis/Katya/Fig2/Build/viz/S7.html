@@ -53,7 +53,7 @@ function make_viz(data){
     .type("network")
     .data({'value':data, 'opacity':0.3})
     .nodes(data.nodes)
-    .edges({'value':data.connections, 'opacity':0.2, 'color': function(d){
+    .edges({'value':data.connections, 'opacity':0.3, 'color': function(d){
       return d.color;
     }})
     .size(0.02)
