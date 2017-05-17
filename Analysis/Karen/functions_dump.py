@@ -104,6 +104,10 @@ def save_image(image_counter, title, folder, prefix):
     figure_name = '%s_img%s_%s.png' %(prefix, image_counter.get_number(), '_'.join(title.split()))
     plt.savefig(os.path.join(folder, figure_name), dpi=300)
 
+def save_image_simply(title, folder):
+    figure_name = '%s.png' %('_'.join(title.split()))
+    plt.savefig(os.path.join(folder, figure_name), dpi=300)
+
 
 
 def get_colors(number_of_colors, colormap):
@@ -263,21 +267,24 @@ def white_and_beautiful(representation='cartoon'):
     cmd.set('ray_opaque_background', 'off')
 
     
-def prepare_GFP_2WUR():
-    cmd.fetch('2WUR', async=0)
-    white_and_beautiful()
-    cmd.select('waters', 'name o')
-    cmd.select('chr', 'resn GYS')
-    cmd.select('aa_64_68', 'resi 64+68')
-    cmd.select('aa_64_68_mainchain', 'aa_64_68 and name C+CO+CA+N')
-    cmd.hide('everything', 'waters')
-    cmd.show('sticks', 'chr')
-    cmd.color('green', 'chr')
-    cmd.show('sticks', 'aa_64_68_mainchain')
+# def prepare_GFP_2WUR():
+#     cmd.fetch('2WUR', async=0)
+#     white_and_beautiful()
+#     cmd.select('waters', 'name o')
+#     cmd.select('chr', 'resn GYS')
+#     cmd.select('aa_64_68', 'resi 64+68')
+#     cmd.select('aa_64_68_mainchain', 'aa_64_68 and name C+CO+CA+N')
+#     cmd.hide('everything', 'waters')
+#     cmd.show('sticks', 'chr')
+#     cmd.color('green', 'chr')
+#     cmd.show('sticks', 'aa_64_68_mainchain')
     
-def color_positions(positions, values=None, representation='spheres', colormap=matplotlib.cm.cool, constant_color=120):
+def color_positions(positions, values=None, representation='spheres', colormap=matplotlib.cm.cool, 
+    constant_color=120, print_colors=False):
+    colors_used = []
     # only positive values
-    assert min(values) >= 0
+    # if str(values) != 'None':
+    #     assert min(values) >= 0
     if type(constant_color) == int or type(constant_color) == float:
         color = colormap(constant_color)
     elif type(constant_color) == str:
@@ -293,12 +300,17 @@ def color_positions(positions, values=None, representation='spheres', colormap=m
     for index, position in enumerate(positions):
         if str(values) != 'None':
             color=colormap(values[index])
+            colors_used.append((values[index], color))
         colorName = "color_" + str(position)
         selName = "temp_selection"
         cmd.set_color(colorName, color[0:3])
         cmd.select(selName, 'resi %s' %position)
         cmd.show(representation, selName)
         cmd.color(colorName, selName)
+    if print_colors:
+        return set(colors_used)
+    else:
+        return None
         
 def get_residues_from_selection(selection_name, only_numbers=True):
     stored.list=[]
@@ -317,7 +329,7 @@ def save_session_properly(session_counter, title, folder, prefix):
 
 # # # # # # # # # # # # 
 
-def plot_segment_positions(ax, scale=1):
+def plot_segment_positions(ax, positions, segment_colors, scale=1):
     old_y = 2*scale
     for row in positions.iterrows():
         for position in row[1].positions_Uniprot_P06633:
@@ -325,7 +337,146 @@ def plot_segment_positions(ax, scale=1):
             while new_y == old_y:
                 new_y = np.random.choice([1*scale, 2*scale])
         x = row[1].positions_Uniprot_P06633
-        plt.plot(x, [new_y for e in x], '.', lw=3, alpha=0.7, 
+        plt.plot(x, [new_y for e in x], marker='o', markeredgecolor='none', lw=3, alpha=0.7, ls='none',
             label=row[1].segment, color=segment_colors[row[1].segment])
-        plt.text(np.median(x), new_y + 2*scale, row[1].segment)
+        # text_position = np.mean(max([v for v in x if v < np.median(x)]), min([v for v in x if v > np.median(x)]))
+        text_position = np.median(x)
+        plt.text(text_position, new_y+1, row[1].segment, va='center', ha='center')
         old_y = new_y
+
+
+def printlist(l):
+    for item in l:
+        print item
+    print
+
+
+from pymol import cmd, stored
+
+def interfaceResidues(cmpx, cA='c. A', cB='c. B', cutoff=1.0, selName="interface"):
+    """
+    interfaceResidues -- finds 'interface' residues between two chains in a complex.
+    
+    PARAMS
+        cmpx
+            The complex containing cA and cB
+        
+        cA
+            The first chain in which we search for residues at an interface
+            with cB
+        
+        cB
+            The second chain in which we search for residues at an interface
+            with cA
+        
+        cutoff
+            The difference in area OVER which residues are considered
+            interface residues.  Residues whose dASA from the complex to
+            a single chain is greater than this cutoff are kept.  Zero
+            keeps all residues.
+            
+        selName
+            The name of the selection to return.
+            
+    RETURNS
+        * A selection of interface residues is created and named
+            depending on what you passed into selName
+        * An array of values is returned where each value is:
+            ( modelName, residueNumber, dASA )
+            
+    NOTES
+        If you have two chains that are not from the same PDB that you want
+        to complex together, use the create command like:
+            create myComplex, pdb1WithChainA or pdb2withChainX
+        then pass myComplex to this script like:
+            interfaceResidues myComlpex, c. A, c. X
+            
+        This script calculates the area of the complex as a whole.  Then,
+        it separates the two chains that you pass in through the arguments
+        cA and cB, alone.  Once it has this, it calculates the difference
+        and any residues ABOVE the cutoff are called interface residues.
+            
+    AUTHOR:
+        Jason Vertrees, 2009.        
+    """
+    # Save user's settings, before setting dot_solvent
+    oldDS = cmd.get("dot_solvent")
+    cmd.set("dot_solvent", 1)
+    
+    # set some string names for temporary objects/selections
+    tempC, selName1 = "tempComplex", selName+"1"
+    chA, chB = "chA", "chB"
+    
+    # operate on a new object & turn off the original
+    cmd.create(tempC, cmpx)
+    cmd.disable(cmpx)
+    
+    # remove cruft and inrrelevant chains
+    cmd.remove(tempC + " and not (polymer and (%s or %s))" % (cA, cB))
+    
+    # get the area of the complete complex
+    cmd.get_area(tempC, load_b=1)
+    # copy the areas from the loaded b to the q, field.
+    cmd.alter(tempC, 'q=b')
+    
+    # extract the two chains and calc. the new area
+    # note: the q fields are copied to the new objects
+    # chA and chB
+    cmd.extract(chA, tempC + " and (" + cA + ")")
+    cmd.extract(chB, tempC + " and (" + cB + ")")
+    cmd.get_area(chA, load_b=1)
+    cmd.get_area(chB, load_b=1)
+    
+    # update the chain-only objects w/the difference
+    cmd.alter( "%s or %s" % (chA,chB), "b=b-q" )
+    
+    # The calculations are done.  Now, all we need to
+    # do is to determine which residues are over the cutoff
+    # and save them.
+    stored.r, rVal, seen = [], [], []
+    cmd.iterate('%s or %s' % (chA, chB), 'stored.r.append((model,resi,b))')
+
+    cmd.enable(cmpx)
+    cmd.select(selName1, 'none')
+    for (model,resi,diff) in stored.r:
+        key=resi+"-"+model
+        if abs(diff)>=float(cutoff):
+            if key in seen: continue
+            else: seen.append(key)
+            rVal.append( (model,resi,diff) )
+            # expand the selection here; I chose to iterate over stored.r instead of
+            # creating one large selection b/c if there are too many residues PyMOL
+            # might crash on a very large selection.  This is pretty much guaranteed
+            # not to kill PyMOL; but, it might take a little longer to run.
+            cmd.select( selName1, selName1 + " or (%s and i. %s)" % (model,resi))
+
+    # this is how you transfer a selection to another object.
+    cmd.select(selName, cmpx + " in " + selName1)
+    # clean up after ourselves
+    cmd.delete(selName1)
+    cmd.delete(chA)
+    cmd.delete(chB)
+    cmd.delete(tempC)
+    # show the selection
+    cmd.enable(selName)
+    
+    # reset users settings
+    cmd.set("dot_solvent", oldDS)
+    
+    return rVal
+
+cmd.extend("interfaceResidues", interfaceResidues)
+
+def flatten_list(nested_list):
+    print 'Check this function'
+    return [item for sublist in nested_list for item in sublist]
+
+
+aa_1 = list("ACDEFGHIKLMNPQRSTVWYX")
+aa_3 = "ALA CYS ASP GLU PHE GLY HIS ILE LYS LEU MET ASN PRO GLN ARG SER THR VAL TRP TYR XXX".split()
+aa_long = ['alanine', 'cysteine', 'aspartic acid', 'glutamic acid', 'phenylalanine', 'glycine',
+                'histidine', 'isoleucine', 'lysine', 'leucine', 'methionine', 'asparagine', 'proline',
+                'glutamine', 'arginine', 'serine', 'threonine', 'valine', 'tryptophan', 'tyrosine',
+                'unknown_aa']
+aa_123 = dict(zip(aa_1, aa_3))
+aa_321 = dict(zip(aa_3, aa_1))

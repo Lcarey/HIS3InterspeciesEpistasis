@@ -1,0 +1,1640 @@
+<html><head><style type='text/css'>body {font-family:sans-serif}p.api {font:small monospace;color:#999}</style></head><body><h1>pymol psico reference</h1><ul><li><a href='#aaindex2b'>aaindex2b</a><li><a href='#add_missing_atoms'>add_missing_atoms</a><li><a href='#alignwithanymethod'>alignwithanymethod</a><li><a href='#angle_between_domains'>angle_between_domains</a><li><a href='#angle_between_helices'>angle_between_helices</a><li><a href='#apbs_surface'>apbs_surface</a><li><a href='#api_info'>api_info</a><li><a href='#apropos'>apropos</a><li><a href='#atmtypenumbers'>atmtypenumbers</a><li><a href='#biomolecule'>biomolecule</a><li><a href='#cafit_orientation'>cafit_orientation</a><li><a href='#cbm'>cbm</a><li><a href='#cbs'>cbs</a><li><a href='#closest_keyframe'>closest_keyframe</a><li><a href='#collapse_resi'>collapse_resi</a><li><a href='#consurfdb'>consurfdb</a><li><a href='#corina'>corina</a><li><a href='#delaunay'>delaunay</a><li><a href='#diff'>diff</a><li><a href='#dss_promotif'>dss_promotif</a><li><a href='#dssp'>dssp</a><li><a href='#dyndom'>dyndom</a><li><a href='#fasta'>fasta</a><li><a href='#fiber'>fiber</a><li><a href='#frames2states'>frames2states</a><li><a href='#gdt_ts'>gdt_ts</a><li><a href='#get_keyframes'>get_keyframes</a><li><a href='#get_raw_distances'>get_raw_distances</a><li><a href='#get_sasa'>get_sasa</a><li><a href='#get_sasa_ball'>get_sasa_ball</a><li><a href='#get_sasa_mmtk'>get_sasa_mmtk</a><li><a href='#grepset'>grepset</a><li><a href='#gyradius'>gyradius</a><li><a href='#helix_orientation'>helix_orientation</a><li><a href='#hydropathy2b'>hydropathy2b</a><li><a href='#intra_promix'>intra_promix</a><li><a href='#intra_theseus'>intra_theseus</a><li><a href='#intra_xfit'>intra_xfit</a><li><a href='#iterate_plot'>iterate_plot</a><li><a href='#load_3d'>load_3d</a><li><a href='#load_aln'>load_aln</a><li><a href='#load_consurf'>load_consurf</a><li><a href='#load_gro'>load_gro</a><li><a href='#load_msms_surface'>load_msms_surface</a><li><a href='#load_mtz_cctbx'>load_mtz_cctbx</a><li><a href='#load_traj_crd'>load_traj_crd</a><li><a href='#load_traj_dcd'>load_traj_dcd</a><li><a href='#local_rms'>local_rms</a><li><a href='#loop_orientation'>loop_orientation</a><li><a href='#map_new_apbs'>map_new_apbs</a><li><a href='#matrix_to_ttt'>matrix_to_ttt</a><li><a href='#mcsalign'>mcsalign</a><li><a href='#msms_surface'>msms_surface</a><li><a href='#mutate'>mutate</a><li><a href='#mutate_all'>mutate_all</a><li><a href='#nice'>nice</a><li><a href='#normalmodes_mmtk'>normalmodes_mmtk</a><li><a href='#normalmodes_pdbmat'>normalmodes_pdbmat</a><li><a href='#normalmodes_prody'>normalmodes_prody</a><li><a href='#paper_png'>paper_png</a><li><a href='#paper_settings'>paper_settings</a><li><a href='#pca_plot'>pca_plot</a><li><a href='#pdb2pqr'>pdb2pqr</a><li><a href='#peptide_rebuild'>peptide_rebuild</a><li><a href='#peptide_rebuild_modeller'>peptide_rebuild_modeller</a><li><a href='#pir'>pir</a><li><a href='#plane_orientation'>plane_orientation</a><li><a href='#polyala'>polyala</a><li><a href='#prepwizard'>prepwizard</a><li><a href='#promix'>promix</a><li><a href='#prosmart'>prosmart</a><li><a href='#ramp_levels'>ramp_levels</a><li><a href='#remove_alt'>remove_alt</a><li><a href='#rms_plot'>rms_plot</a><li><a href='#rmsf2b'>rmsf2b</a><li><a href='#save'>save</a><li><a href='#save_colored_fasta'>save_colored_fasta</a><li><a href='#save_movie_mpeg1'>save_movie_mpeg1</a><li><a href='#save_pdb'>save_pdb</a><li><a href='#save_settings'>save_settings</a><li><a href='#save_traj'>save_traj</a><li><a href='#save_xyzr'>save_xyzr</a><li><a href='#sculpt_relax'>sculpt_relax</a><li><a href='#select_distances'>select_distances</a><li><a href='#select_nucseq'>select_nucseq</a><li><a href='#select_pepseq'>select_pepseq</a><li><a href='#select_sspick'>select_sspick</a><li><a href='#set_phipsi'>set_phipsi</a><li><a href='#set_sequence'>set_sequence</a><li><a href='#sidechaincenters'>sidechaincenters</a><li><a href='#snp_ncbi'>snp_ncbi</a><li><a href='#snp_uniprot'>snp_uniprot</a><li><a href='#spectrum_states'>spectrum_states</a><li><a href='#spectrumany'>spectrumany</a><li><a href='#split_molecules'>split_molecules</a><li><a href='#sst'>sst</a><li><a href='#stride'>stride</a><li><a href='#stub2ala'>stub2ala</a><li><a href='#supercell'>supercell</a><li><a href='#symdiff'>symdiff</a><li><a href='#symexpcell'>symexpcell</a><li><a href='#theseus'>theseus</a><li><a href='#tmalign'>tmalign</a><li><a href='#update_identifiers'>update_identifiers</a><li><a href='#volume_esp'>volume_esp</a><li><a href='#volume_fofc'>volume_fofc</a><li><a href='#xfit'>xfit</a></ul><hr size=1><h2 id='aaindex2b'>aaindex2b</h2><pre>DESCRIPTION
+
+    Looks up the Amino Acid Index from http://www.genome.jp/aaindex/
+    for the given key and assignes b-factors to the given selection. Unknown
+    residues get the average index value assigned.
+
+USAGE
+
+    aaindex2b key [, selection ]
+
+ARGUMENTS
+
+    key = string: Key of AAindex entry
+
+    selection = string: atoms to assign b-factors {default: (all)}
+
+EXAMPLE
+
+    # Hydropathy index by Kyte-Doolittle
+    aaindex2b KYTJ820101
+    spectrumany b, white yellow forest
+    show surface
+
+SEE ALSO
+
+    hydropathy2b</pre><p class='api'>api: psico.aaindex.aaindex2b</p><hr size=1><h2 id='add_missing_atoms'>add_missing_atoms</h2><pre>DESCRIPTION
+
+    Mutate those residues to themselves which have missing atoms
+
+SEE ALSO
+
+    stub2ala</pre><p class='api'>api: psico.modelling.add_missing_atoms</p><hr size=1><h2 id='alignwithanymethod'>alignwithanymethod</h2><pre>DESCRIPTION
+
+    Align copies of mobile to target with several alignment methods
+
+ARGUMENTS
+
+    mobile = string: atom selection
+
+    target = string: atom selection
+
+    methods = string: space separated list of PyMOL commands which take
+    arguments "mobile" and "target" (in any order) {default: align super
+    cealign tmalign theseus}</pre><p class='api'>api: psico.fitting.alignwithanymethod</p><hr size=1><h2 id='angle_between_domains'>angle_between_domains</h2><pre>DESCRIPTION
+
+    Angle by which a molecular selection would be rotated when superposing
+    on a selection2.
+
+    Do not use for measuring angle between helices, since the alignment of
+    the helices might involve a rotation around the helix axis, which will
+    result in a larger angle compared to the angle between helix axes.
+
+USAGE
+
+    angle_between_domains selection1, selection2 [, method ]
+
+ARGUMENTS
+
+    selection1 = string: atom selection of first helix
+
+    selection2 = string: atom selection of second helix
+
+    method = string: alignment command like "align" or "super" {default: align}
+
+EXAMPLE
+
+    fetch 3iplA 3iplB, async=0
+    select domain1, resi 1-391
+    select domain2, resi 392-475
+    align 3iplA and domain1, 3iplB and domain1
+    angle_between_domains 3iplA and domain2, 3iplB and domain2
+
+SEE ALSO
+
+    align, super, angle_between_helices</pre><p class='api'>api: psico.orientation.angle_between_domains</p><hr size=1><h2 id='angle_between_helices'>angle_between_helices</h2><pre>DESCRIPTION
+
+    Calculates the angle between two helices
+
+USAGE
+
+    angle_between_helices selection1, selection2 [, method [, visualize]]
+
+ARGUMENTS
+
+    selection1 = string: atom selection of first helix
+
+    selection2 = string: atom selection of second helix
+
+    method = string: function to calculate orientation {default: helix_orientation}
+
+    visualize = 0 or 1: show fitted vector as arrow {default: 1}
+
+EXAMPLE
+
+    fetch 2x19, async=0
+    select hel1, /2x19//B/23-36/
+    select hel2, /2x19//B/40-54/
+    angle_between_helices hel1, hel2
+    angle_between_helices hel1, hel2, cafit
+
+SEE ALSO
+
+    helix_orientation, loop_orientation, cafit_orientation, angle_between_domains</pre><p class='api'>api: psico.orientation.angle_between_helices</p><hr size=1><h2 id='apbs_surface'>apbs_surface</h2><pre>DESCRIPTION
+
+    Show electrostatic potential on surface (calculated with APBS).
+
+    Important: surface_color is a object property, so when calculating
+    surface potential for different selections and visualize them all
+    together, you should first split them into separate objects.
+
+USAGE
+
+    apbs_surface [ selection [, maximum [, minimum ]]]
+
+EXAMPLE
+
+    fetch 2x19, async=0
+    split_chains
+    apbs_surface 2x19_A, 10
+    apbs_surface 2x19_B, 10
+
+SEE ALSO
+
+    map_new_apbs, APBS Tools Plugin, isosurface, gradient,
+    util.protein_vacuum_esp</pre><p class='api'>api: psico.electrostatics.apbs_surface</p><hr size=1><h2 id='api_info'>api_info</h2><pre>DESCRIPTION
+
+    Get the full function name (incl. module) of given command.
+
+ARGUMENTS
+
+    name = string: name of a PyMOL command</pre><p class='api'>api: psico.helping.api_info</p><hr size=1><h2 id='apropos'>apropos</h2><pre>DESCRIPTION
+
+    "apropos" searches through the documentation of all currently 
+    defined commands and lists those commands for which the keyword
+    is either contained in the documentation or matches the command
+    name itself.
+
+    If an appropriate "DESCRIPTION" section is provided in the documentation
+    of the command, the first 80 characters are listed as a summary.
+    
+    Author: Ezequiel Panepucci
+    http://pymolwiki.org/index.php/Apropos
+
+USAGE
+
+    apropos [keyword or regexp]
+ 
+SEE ALSO
+
+    grepset</pre><p class='api'>api: psico.helping.apropos</p><hr size=1><h2 id='atmtypenumbers'>atmtypenumbers</h2><pre>DESCRIPTION
+
+    Update VDW radii for the given selection, based on "atmtypenumbers" file.
+
+ARGUMENTS
+
+    filename = str: path to "atmtypenumbers" file
+
+    selection = str: atom selection to update {default: all}
+
+    united = 1: Use united (implicit hydrogens) radii {default}
+    united = 0: Use explicit radii
+
+EXAMPLE
+
+    atmtypenumbers /tmp/MSMS-release/atmtypenumbers, united=0</pre><p class='api'>api: psico.msms.atmtypenumbers</p><hr size=1><h2 id='biomolecule'>biomolecule</h2><pre>DESCRIPTION
+
+    Create biological unit (quaternary structure) as annotated by the REMARK
+    350 BIOMOLECULE record.
+
+USAGE
+
+    biomolecule name [, filename [, prefix [, number ]]]
+
+ARGUMENTS
+
+    name = string: name of object and basename of PDB file, if
+    filename is not given {default: first loaded object}
+
+    filename = string: file to read remarks from {default: &lt;name>.pdb}
+
+    prefix = string: prefix for new objects {default: &lt;name>}
+
+EXAMPLE
+
+    fetch 1rmv, async=0
+    biomolecule 1rmv</pre><p class='api'>api: psico.xtal.biomolecule</p><hr size=1><h2 id='cafit_orientation'>cafit_orientation</h2><pre>DESCRIPTION
+
+    Get the center and direction of a peptide by least squares
+    linear fit on CA atoms.
+
+USAGE
+
+    cafit_orientation selection [, visualize ]
+
+NOTES
+
+    Requires python module "numpy".
+
+SEE ALSO
+
+    helix_orientation</pre><p class='api'>api: psico.orientation.cafit_orientation</p><hr size=1><h2 id='cbm'>cbm</h2><pre>DESCRIPTION
+
+    Color by molecule
+
+USAGE
+
+    cbm [ selection [, first_color ]]</pre><p class='api'>api: psico.viewing.cbm</p><hr size=1><h2 id='cbs'>cbs</h2><pre>DESCRIPTION
+
+    Color by segment</pre><p class='api'>api: psico.viewing.cbs</p><hr size=1><h2 id='closest_keyframe'>closest_keyframe</h2><pre>DESCRIPTION
+
+    Jump to the closest movie keyframe.</pre><p class='api'>api: psico.moving.closest_keyframe</p><hr size=1><h2 id='collapse_resi'>collapse_resi</h2><pre>DESCRIPTION
+
+    Returns a compact selection macro for the given selection on
+    residue number (resi) level.
+
+    Rewrite of http://pymolwiki.org/index.php/CollapseSel
+
+ARGUMENTS
+
+    selection = string: atom selection {default: (sele)}</pre><p class='api'>api: psico.selecting.collapse_resi</p><hr size=1><h2 id='consurfdb'>consurfdb</h2><pre>DESCRIPTION
+
+    Color by evolutionary conservation. Writes scores to b-factor.
+ 
+    Fetches pre-calculated conservation profile from ConSurf-DB.
+    http://consurfdb.tau.ac.il/
+
+USAGE
+
+    consurfdb code [, chain [, selection [, palette ]]]
+
+EXAMPLE
+
+    fetch 1ubq, async=0
+    consurfdb 3nhe, B, 1ubq
+
+SEE ALSO
+
+    load_consurf</pre><p class='api'>api: psico.conservation.consurfdb</p><hr size=1><h2 id='corina'>corina</h2><pre>DESCRIPTION
+
+    Run corina on selection and load as new object</pre><p class='api'>api: psico.creating.corina</p><hr size=1><h2 id='delaunay'>delaunay</h2><pre>DESCRIPTION
+
+    Full-atom Delaunay Tessalator
+
+    Creates either a molecular object with delaunay edges as bonds, or a CGO
+    object with edge colors according to edge length.
+
+USAGE
+
+    delaunay [ selection [, name [, cutoff=10.0 [, as_cgo=0 ]]]]
+
+SEE ALSO
+
+    PyDeT plugin: http://pymolwiki.org/index.php/PyDet</pre><p class='api'>api: psico.geometry.delaunay</p><hr size=1><h2 id='diff'>diff</h2><pre>DESCRIPTION
+
+    Difference between two molecules
+
+ARGUMENTS
+
+    sele1 = string: atom selection
+
+    sele2 = string: atom selection
+
+    byres = 0/1: report residues, not atoms (does not affect selection)
+    {default: 1}
+
+    operator = in/like/align: operator to match atoms {default: in}
+
+SEE ALSO
+
+    symdiff</pre><p class='api'>api: psico.selecting.diff</p><hr size=1><h2 id='dss_promotif'>dss_promotif</h2><pre>DESCRIPTION
+
+    Secondary structure assignment with PROMOTIF.
+    http://www.rubic.rdg.ac.uk/~gail/#Software
+
+SEE ALSO
+
+    dss, dssp, stride</pre><p class='api'>api: psico.editing.dss_promotif</p><hr size=1><h2 id='dssp'>dssp</h2><pre>DESCRIPTION
+
+    Secondary structure assignment with DSSP.
+    http://swift.cmbi.ru.nl/gv/dssp/
+
+ARGUMENTS
+
+    selection = string: atom selection {default: all}
+
+    exe = string: name of dssp executable {default: dsspcmbi}
+
+    raw = string: atom property to load raw dssp class into {default: ''}
+
+EXAMPLE
+
+    dssp all, /sw/bin/dsspcmbi, raw=text_type
+    color gray
+    color red, text_type H
+    color orange, text_type G
+    color yellow, text_type E
+    color wheat, text_type B
+    color forest, text_type T
+    color green, text_type S
+    set cartoon_discrete_colors, 1
+
+SEE ALSO
+
+    dss, stride</pre><p class='api'>api: psico.editing.dssp</p><hr size=1><h2 id='dyndom'>dyndom</h2><pre>DESCRIPTION
+
+    DynDom wrapper
+
+    DynDom is a program to determine domains, hinge axes and hinge bending
+    residues in proteins where two conformations are available.
+
+    http://fizz.cmp.uea.ac.uk/dyndom/
+
+USAGE
+
+    dyndom mobile, target [, window [, domain [, ratio ]]]</pre><p class='api'>api: psico.fitting.dyndom</p><hr size=1><h2 id='fasta'>fasta</h2><pre>DESCRIPTION
+
+    Print sequence in FASTA format
+
+ARGUMENTS
+
+    selection = string: atom selection {default: all}
+
+    gapped = integer: put missing residues as dashes into the sequence {default: 1}
+
+    wrap = integer: wrap lines, 0 for no wrapping {default: 70}
+
+SEE ALSO
+
+    pir, pymol.exporting.get_fastastr</pre><p class='api'>api: psico.fasta.fasta</p><hr size=1><h2 id='fiber'>fiber</h2><pre>DESCRIPTION
+
+    Run X3DNA's "fiber" tool.
+
+    For the list of structure identification numbers, see for example:
+    http://xiang-jun.blogspot.com/2009/10/fiber-models-in-3dna.html
+
+USAGE
+
+    fiber seq [, num [, name [, rna [, single ]]]]
+
+ARGUMENTS
+
+    seq = str: single letter code sequence or number of repeats for
+    repeat models.
+
+    num = int: structure identification number {default: 4}
+
+    name = str: name of object to create {default: random unused name}
+
+    rna = 0/1: 0=DNA, 1=RNA {default: 0}
+
+    single = 0/1: 0=double stranded, 1=single stranded {default: 0}
+
+EXAMPLES
+
+    # environment (this could go into ~/.pymolrc or ~/.bashrc)
+    os.environ["X3DNA"] = "/opt/x3dna-v2.3"
+
+    # B or A DNA from sequence
+    fiber CTAGCG
+    fiber CTAGCG, 1, ADNA
+
+    # double or single stranded RNA from sequence
+    fiber AAAGGU, name=dsRNA, rna=1
+    fiber AAAGGU, name=ssRNA, rna=1, single=1
+
+    # poly-GC Z-DNA repeat model with 10 repeats
+    fiber 10, 15</pre><p class='api'>api: psico.creating.fiber</p><hr size=1><h2 id='frames2states'>frames2states</h2><pre>DESCRIPTION
+
+    Map specific object states to frames.
+    "specification" is a sequence of "frame:state" mappings.
+
+EXAMPLE
+
+    fetch 1d7q 1nmr, async=0
+    mset 1-20
+    # reverse state order just for 1nmr
+    frames2states 1nmr, 1:20 20:1</pre><p class='api'>api: psico.moving.frames2states</p><hr size=1><h2 id='gdt_ts'>gdt_ts</h2><pre>DESCRIPTION
+
+    Global Distance Test Total Score (GDT_TS)</pre><p class='api'>api: psico.fitting.gdt_ts</p><hr size=1><h2 id='get_keyframes'>get_keyframes</h2><pre>DESCRIPTION
+
+    Get the list of camera keyframes for the current movie.</pre><p class='api'>api: psico.moving.get_keyframes</p><hr size=1><h2 id='get_raw_distances'>get_raw_distances</h2><pre>DESCRIPTION
+
+    Get the list of pair items from distance objects. Each list item is a
+    tuple of (index1, index2, distance).
+
+    Based on a script from Takanori Nakane, posted on pymol-users mailing list.
+    http://www.mail-archive.com/pymol-users@lists.sourceforge.net/msg10143.html
+
+ARGUMENTS
+
+    names = string: names of distance objects (no wildcards!) {default: all
+    measurement objects}
+
+    state = integer: object state {default: 1}
+
+    selection = string: atom selection {default: all}
+
+SEE ALSO
+
+    select_distances, cmd.find_pairs, cmd.get_raw_alignment</pre><p class='api'>api: psico.querying.get_raw_distances</p><hr size=1><h2 id='get_sasa'>get_sasa</h2><pre>DESCRIPTION
+
+    Get solvent accesible surface area
+
+SEE ALSO
+
+    get_area
+    pymol.util.get_sasa (considered broken!)</pre><p class='api'>api: psico.querying.get_sasa</p><hr size=1><h2 id='get_sasa_ball'>get_sasa_ball</h2><pre>DESCRIPTION
+
+    Get solvent accesible surface area using BALL.NumericalSAS
+
+    http://www.ball-project.org/</pre><p class='api'>api: psico.querying.get_sasa_ball</p><hr size=1><h2 id='get_sasa_mmtk'>get_sasa_mmtk</h2><pre>DESCRIPTION
+
+    Get solvent accesible surface area using MMTK.MolecularSurface
+
+    http://dirac.cnrs-orleans.fr/MMTK/
+
+    This command is very picky with missing atoms and wrong atom naming.
+
+SEE ALSO
+
+    stub2ala, get_sasa, get_sasa_ball</pre><p class='api'>api: psico.querying.get_sasa_mmtk</p><hr size=1><h2 id='grepset'>grepset</h2><pre>DESCRIPTION
+
+    "grepset" greps through the list of settings using a python
+    regular expression as defined in the 're' module.
+    It returns a list of settings/values matching the regexp.
+    No regexp returns every setting.
+
+    Author: Ezequiel Panepucci
+    http://pymolwiki.org/index.php/Grepset
+
+USAGE
+
+    grepset [regexp]
+ 
+EXAMPLE
+
+    grepset line
+    grepset ray
+    grepset (^line|color$)
+ 
+SEE ALSO
+
+    apropos</pre><p class='api'>api: psico.helping.grepset</p><hr size=1><h2 id='gyradius'>gyradius</h2><pre>DESCRIPTION
+ 
+    Radius of gyration
+
+    Based on: http://pymolwiki.org/index.php/Radius_of_gyration
+
+SEE ALSO
+
+    centerofmass</pre><p class='api'>api: psico.querying.gyradius</p><hr size=1><h2 id='helix_orientation'>helix_orientation</h2><pre>DESCRIPTION
+
+    Get the center and direction of a helix as vectors. Will only work
+    for alpha helices and gives slightly different results than
+    cafit_orientation. Averages direction of C(i)->O(i)->N(i+4).
+
+USAGE
+
+    helix_orientation selection [, visualize [, cutoff ]]
+
+ARGUMENTS
+
+    selection = string: atom selection of helix
+
+    visualize = 0 or 1: show fitted vector as arrow {default: 1}
+
+    cutoff = float: maximal hydrogen bond distance {default: 3.5}
+
+SEE ALSO
+
+    angle_between_helices, loop_orientation, cafit_orientation</pre><p class='api'>api: psico.orientation.helix_orientation</p><hr size=1><h2 id='hydropathy2b'>hydropathy2b</h2><pre>DESCRIPTION
+
+    Load Kyte-Doolittle hydropathy index values into b-factor column.
+
+SEE ALSO
+
+    aaindex2b</pre><p class='api'>api: psico.aaindex.hydropathy2b</p><hr size=1><h2 id='intra_promix'>intra_promix</h2><pre>DESCRIPTION
+
+    Finds rigid segments in a multi-state object.
+
+    Requires CSB, http://csb.codeplex.com
+
+ARGUMENTS
+
+    selection = string: atom selection
+
+    K = integer: Number of segments {default: guess}
+
+    prefix = string: Prefix of named segment selections to make
+
+SEE ALSO
+
+    promix
+
+REFERENCE
+
+    Mixture models for protein structure ensembles
+    Hirsch M, Habeck M. - Bioinformatics. 2008 Oct 1;24(19):2184-92</pre><p class='api'>api: psico.fitting.intra_promix</p><hr size=1><h2 id='intra_theseus'>intra_theseus</h2><pre>DESCRIPTION
+
+    Fits all states of an object to an atom selection with maximum likelihood.
+
+    THESEUS: Maximum likelihood multiple superpositioning
+    http://www.theseus3d.org
+
+ARGUMENTS
+
+    selection = string: atoms to fit
+
+    state = integer: keep transformation of this state unchanged {default: 1}
+
+    cov = 0/1: 0 is variance weighting, 1 is covariance weighting (slower)
+    {default: 0}
+
+SEE ALSO
+
+    intra_fit, intra_rms_cur</pre><p class='api'>api: psico.fitting.intra_theseus</p><hr size=1><h2 id='intra_xfit'>intra_xfit</h2><pre>DESCRIPTION
+
+    Weighted superposition of all states of an object to the intermediate
+    structure over all states. The weights are estimated with maximum
+    likelihood.
+
+    The result should be very similar to "intra_theseus".
+
+    Requires CSB, http://csb.codeplex.com
+
+ARGUMENTS
+
+    selection = string: atom selection
+
+    load_b = 0 or 1: save -log(weights) into B-factor column {default: 0}
+
+NOTE
+
+    Assumes all states to have identical number of CA-atoms.
+
+SEE ALSO
+
+    xfit, intra_fit, intra_theseus</pre><p class='api'>api: psico.fitting.intra_xfit</p><hr size=1><h2 id='iterate_plot'>iterate_plot</h2><pre>DESCRIPTION
+
+    Plot atomic properties.
+
+ARGUMENTS
+
+    selection = string: atom selection
+
+    expr_y = string: python expression for y values
+    
+    expr_x = string: python expression for x values {default: None}
+
+    scatter = 0/1: make line plot or scatter plot {default: 0, line plot}
+
+EXAMPLE
+
+    # C-alpha b-factors
+    iterate_plot name CA, b, resv</pre><p class='api'>api: psico.plotting.iterate_plot</p><hr size=1><h2 id='load_3d'>load_3d</h2><pre>DESCRIPTION
+
+    Load a survex 3d cave survey as "molecule"
+
+    http://survex.com
+    http://trac.survex.com/browser/trunk/doc/3dformat.htm</pre><p class='api'>api: psico.importing.load_3d</p><hr size=1><h2 id='load_aln'>load_aln</h2><pre>DESCRIPTION
+
+    Load an alignment from file and apply it to already loaded structures.
+
+USAGE
+
+    load_aln filename [, object [, mobile [, target [, mobile_id [, target_id [, format ]]]]]]
+
+ARGUMENTS
+
+    filename = string: alignment file
+
+    object = string: name of the object {default: filename prefix}
+
+    mobile, target = string: atom selections {default: ids from alignment file}
+
+    mobile_id, target_id = string: ids from alignment file {default: first two}
+
+    format = string: file format, see http://biopython.org/wiki/AlignIO
+    {default: guess from first line in file}
+
+EXAMPLE
+
+    fetch 1bz4 1cpr, async=0
+    super 1bz4 and guide, 1cpr and guide, object=aln1, window=5
+    save /tmp/super.aln, aln1
+    delete aln1
+    load_aln /tmp/super.aln, aln2, format=clustal</pre><p class='api'>api: psico.importing.load_aln</p><hr size=1><h2 id='load_consurf'>load_consurf</h2><pre>DESCRIPTION
+
+    Color by evolutionary conservation. Writes scores to b-factor.
+
+    You need a "r4s.res" or "consurf.grades" input file.
+
+USAGE
+
+    load_consurf filename, selection [, palette ]
+
+SEE ALSO
+
+    consurfdb</pre><p class='api'>api: psico.conservation.load_consurf</p><hr size=1><h2 id='load_gro'>load_gro</h2><pre>DESCRIPTION
+
+    Load a gro file (molecular structure in Gromos87 format).
+
+    http://manual.gromacs.org/online/gro.html
+
+    This command can handle larger ID and resi values than PDB files and thus
+    is better (but slower) than converting a gro file to PDB format using
+    editconf.
+
+    Based on a script from Tsjerk Wassenaar, posted on pymol-users mailing list.
+    http://www.mail-archive.com/pymol-users@lists.sourceforge.net/msg09394.html</pre><p class='api'>api: psico.importing.load_gro</p><hr size=1><h2 id='load_msms_surface'>load_msms_surface</h2><pre>DESCRIPTION
+
+    Load MSMS .vert and .face files as a CGO</pre><p class='api'>api: psico.msms.load_msms_surface</p><hr size=1><h2 id='load_mtz_cctbx'>load_mtz_cctbx</h2><pre>DESCRIPTION
+
+    Load maps from an MTZ file, using iotbx (via "cctbx.python").
+
+    Map objects will be named: &lt;prefix>_&lt;amplitudes>_&lt;phases>
+
+ARGUMENTS
+
+    filename = str: path to mtz file
+
+    prefix = str: object name prefix for new map objects
+
+    amplitudes = str: amplitudes column label (optional). If not given,
+    load all maps. If given, the 'phases' argument is required as well. 
+
+    phases = str: phases column label (required if and only if
+    amplitudes is given as well)</pre><p class='api'>api: psico.load_mtz_cctbx.load_mtz_cctbx</p><hr size=1><h2 id='load_traj_crd'>load_traj_crd</h2><pre>DESCRIPTION
+
+    Load Amber CRD trajectory file.
+
+    http://ambermd.org/formats.html#trajectory
+
+    For some (unkown to me) reason, this does not work with load_traj (but it
+    should!).
+
+SEE ALSO
+
+    load_traj</pre><p class='api'>api: psico.importing.load_traj_crd</p><hr size=1><h2 id='load_traj_dcd'>load_traj_dcd</h2><pre>DESCRIPTION
+
+    Load DCD trajectory.
+
+    http://www.ks.uiuc.edu/Research/vmd/plugins/molfile/dcdplugin.html
+
+SEE ALSO
+
+    save_traj, load_traj_crd, load_traj</pre><p class='api'>api: psico.importing.load_traj_dcd</p><hr size=1><h2 id='local_rms'>local_rms</h2><pre>DESCRIPTION
+
+    "local_rms" computes the C-alpha RMS fit within a sliding window along the
+    backbone. The obtained RMS is assigned as a pseudo b-factor to the residue
+    in the middle of the window. This is useful to visualize hinge-regions.
+
+    The result is very sensitive to window size.
+
+USAGE
+
+    local_rms mobile, target [, window ]
+
+ARGUMENTS
+
+    mobile = string: object to assign b-factors and to visualize as putty cartoon
+
+    target = string: object to superimpose mobile to
+
+    window = integer: width of sliding window {default: 20}
+
+    match = string: in, like, align, none or the name of an alignment object
+    {default: align}
+      * in: match all atom identifiers (segi,chain,resn,resi,name)
+      * like: match residue number (resi)
+      * align: do a sequence alignment
+      * none: assume same number of atoms in both selections
+      * name of alignment object: take sequence alignment from object
+
+EXAMPLE
+
+    fetch 2x19 2xwu, async=0
+    remove not chain B or not polymer
+    local_rms 2x19, 2xwu, 40</pre><p class='api'>api: psico.fitting.local_rms</p><hr size=1><h2 id='loop_orientation'>loop_orientation</h2><pre>DESCRIPTION
+
+    Get the center and approximate direction of a peptide. Works for any
+    secondary structure.
+    Averages direction of N(i)->C(i) pseudo bonds.
+
+USAGE
+
+    loop_orientation selection [, visualize ]
+
+SEE ALSO
+
+    helix_orientation</pre><p class='api'>api: psico.orientation.loop_orientation</p><hr size=1><h2 id='map_new_apbs'>map_new_apbs</h2><pre>DESCRIPTION
+
+    Create electrostatic potential map with APBS.
+
+    For more control over parameters and a graphical user interface I
+    recommend to use the APBS Tools Plugin instead.
+
+    In case of missing atoms or residues I recommend to remodel the input
+    structure with modeller before calculating the electrostatic potential.
+
+    If selection has no charges and radii, they will be automatically assigned
+    with PyMOL (not with pdb2pqr).
+
+SEE ALSO
+
+    apbs_surface, map_new (coulomb), APBS Tools Plugin</pre><p class='api'>api: psico.electrostatics.map_new_apbs</p><hr size=1><h2 id='matrix_to_ttt'>matrix_to_ttt</h2><pre>DESCRIPTION
+
+    Objects can have state matrices and view (frames) matrices. This function
+    takes the total matrix and stores it either as view matrix or as state
+    matrix (reverse=1). For movie frames, movie_auto_store must be set.</pre><p class='api'>api: psico.moving.matrix_to_ttt</p><hr size=1><h2 id='mcsalign'>mcsalign</h2><pre>DESCRIPTION
+
+    Align two (ligand) selections based on Maximum-Common-Substructure.
+
+    Requires: (rdkit | indigo), csb
+
+ARGUMENTS
+
+    mobile = str: atom selection of mobile object
+
+    target = str: atom selection of target object
+
+    mobile_state = int: object state of mobile selection
+    {default: -1 = current state}
+
+    target_state = int: object state of target selection
+    {default: -1 = current state}
+
+    cycles = int: number of weight-refinement iterations for
+    weighted RMS fitting {default: 5}
+
+    timeout = int: MCS search timeout {default: 10}
+
+    method = indigo or rdkit {default: check availability}
+
+EXAMPLE
+
+    fetch 3zcf 4n8t, async=0
+    mcsalign /3zcf//A/HEC, /4n8t//A/HEM
+    zoom /4n8t//A/HEM, animate=2, buffer=3</pre><p class='api'>api: psico.mcsalign.mcsalign</p><hr size=1><h2 id='msms_surface'>msms_surface</h2><pre>DESCRIPTION
+
+    Run MSMS on the given selection and load the generated surface
+    as a CGO.
+
+    Note that PyMOL's own surface generation by default excludes atoms with
+    the "ignore" flag. To match this behavior, use "polymer" (recommended)
+    or "not flag 25" in your selection.
+
+ARGUMENTS
+
+    selection = str: atom selection {default: polymer}
+
+    state = int: object state {default: 1}
+
+    density = float: MSMS surface point density {default: 3}
+
+    name = str: name of CGO object to create
+
+    atomcolors = 0/1: color surface by atom colors {default: 0}
+
+EXAMPLE
+
+    # optional: use Connolly radii
+    atmtypenumbers /tmp/MSMS-release/atmtypenumbers
+
+    # show surface for protein
+    msms_surface polymer</pre><p class='api'>api: psico.msms.msms_surface</p><hr size=1><h2 id='mutate'>mutate</h2><pre>DESCRIPTION
+
+    Mutate a single residue. Does call the mutagenesis wizard non-interactively
+    and tries to select the best rotamer. Can do some sculpting in the end to
+    the best rotamer.
+
+USAGE
+
+    mutate selection, new_resn [, inplace [, sculpt [, hydrogens]]]
+
+ARGUMENTS
+
+    selection = string: atom selection of single residue
+
+    new_resn = string: new residue name (3-letter or 1-letter)
+
+    inplace = 0 or 1: work on copy of input object if 0 {default: 0}
+
+    sculpt = 0: no sculpting {default}
+    sculpt = 1: do sculpting on best rotamer
+    sculpt = 2: do sculpting with neighbors
+
+    hydrogens = string: keep, auto or none {default: auto}
+
+    mode = 0: select rotamer with best clash score {default}
+    mode = 1: take chi angles from original residue
+    mode = 2: first rotamer
+
+EXAMPLE
+
+    fetch 2x19, async=0
+    select x, A/CYS`122/
+    zoom x
+    mutate x, LYS</pre><p class='api'>api: psico.modelling.mutate</p><hr size=1><h2 id='mutate_all'>mutate_all</h2><pre>DESCRIPTION
+
+    Mutate all residues in selection. By default do mutation in-place (unlike
+    the 'mutate' command which by default works on a copy).
+
+    FOR SCULPTING ONLY SUPPORTS SELECTIONS WITHIN THE SAME MODEL!
+
+SEE ALSO
+
+    mutate</pre><p class='api'>api: psico.modelling.mutate_all</p><hr size=1><h2 id='nice'>nice</h2><pre>DESCRIPTION
+
+    My favourite representation
+
+    Color: by chain (elem C) and by element (others)
+
+    Representation: cartoon (polymer), sticks (organic),
+    spheres (inorganic) and nonbonded (solvent)
+
+USAGE
+
+    nice [ selection ]</pre><p class='api'>api: psico.viewing.nice</p><hr size=1><h2 id='normalmodes_mmtk'>normalmodes_mmtk</h2><pre>DESCRIPTION
+
+    Fast normal modes for large proteins using an elastic network model (CA only)
+
+    Based on:
+    http://dirac.cnrs-orleans.fr/MMTK/using-mmtk/mmtk-example-scripts/normal-modes/</pre><p class='api'>api: psico.nma.normalmodes_mmtk</p><hr size=1><h2 id='normalmodes_pdbmat'>normalmodes_pdbmat</h2><pre>DESCRIPTION
+
+    PDBMAT and DIAGRTB wrapper
+
+    Runs "pdbmat" and "diagrtb" and generates perturbed models for modes
+    "first" to "last". WARNING: May run for a long time.
+
+    PDBMAT computes the mass-weighted second derivatives energy matrix,
+    using Tirion's model, that is, an elastic network model (ENM).
+    In such models, close particles (atoms) are linked by springs.
+
+    http://ecole.modelisation.free.fr/modes.html
+
+NOTES
+
+    Only considers ATOM records, if your model contains MSE residues or
+    ligands that you want to consider, prepare it like this:
+    mse2met (all)                # for MSE residues
+    alter (hetatm), type='ATOM'  # for any hetatm
+
+ARGUMENTS
+
+    selection = string: atom selection
+
+    cutoff = float: interaction distance cutoff in angstroem {default: 10}
+
+    force = float: interaction force constant {default: 1.0}
+
+    mass = string: origin of mass values {default: COOR}
+
+    first = int: first mode to create perturbed model {default: 7}
+
+    last = int: last mode to create perturbed model {default: 10}
+
+    choose = string: eigenvalues chosen {default: LOWE}
+
+    substruct = string: type of substructuring {default: RESI}
+
+    blocksize = int: nb of residues per block {default: 4}</pre><p class='api'>api: psico.nma.normalmodes_pdbmat</p><hr size=1><h2 id='normalmodes_prody'>normalmodes_prody</h2><pre>DESCRIPTION
+
+    Anisotropic Network Model (ANM) analysis with ProDy.
+
+    Based on:
+    http://www.csb.pitt.edu/prody/examples/dynamics/enm/anm.html</pre><p class='api'>api: psico.nma.normalmodes_prody</p><hr size=1><h2 id='paper_png'>paper_png</h2><pre>DESCRIPTION
+
+    Saves a PNG format image file of the current display.
+    Instead of pixel dimensions, physical dimensions for
+    printing (in millimeters) and DPI are specified.
+
+USAGE
+
+    paper_png filename [, width [, height [, dpi [, ray ]]]]
+
+ARGUMENTS
+
+    filename = string: filename
+
+    width = float: width in millimeters {default: 100 = 10cm}
+    width = string: width including unit (like: '10cm' or '100mm')
+
+    height = float or string, like "width" argument. If height=0, keep
+    aspect ratio {default: 0}
+
+    dpi = float: dots-per-inch {default: 300}
+
+    ray = 0 or 1: should ray be run first {default: 1 (yes)}
+
+SEE ALSO
+
+    png</pre><p class='api'>api: psico.exporting.paper_png</p><hr size=1><h2 id='paper_settings'>paper_settings</h2><pre>DESCRIPTION
+
+    Set rendering quality high and some stuff good for printing:
+    
+     * Side chain helper (cartoon_side_chain_helper = 1)
+     * No shadows (ray_shadows = 0)
+
+ARGUMENTS
+
+    fancy = 0 or 1: set cartoon_fancy_helices and cartoon_highlight_color
+    {default: 0}
+
+NOTES
+
+    You may also try "set ray_trace_mode, 1"</pre><p class='api'>api: psico.setting.paper_settings</p><hr size=1><h2 id='pca_plot'>pca_plot</h2><pre>DESCRIPTION
+
+    Principal Component Analysis on a set of superposed conformations, given
+    by an alignment object. By default all states in all objects are
+    considered. Generates a 2d-plot of the first two principal components.
+
+USAGE
+
+    pca_plot aln_object [, ref [, state [, maxlabels ]]]
+
+ARGUMENTS
+
+    aln_object = string: name of alignment object, defines the selection
+    and the atom mapping between objects
+
+    ref = string: object names for which to calculate PCA for {default: all}
+
+    state = integer: if state=0 use all states {default: 0}
+
+    maxlabels = integer: label dots in plot if maxlabels&lt;0 or number of models
+    not more than maxlabels {default: 20}
+
+    size = float: size of plot points in px^2 {default: 20}
+
+    invert = string: invert plotting axes x, y or xy {default: ''}
+
+    which = (int,int): indices of principal components to plot {default: (0,1)}
+
+    alpha = float: opacity of plotting points
+
+    filename = string: if given, plot to file {default: None}
+
+EXAMPLE
+
+    fetch 1ake 4ake 1dvr 1ak2, async=0
+    split_chains
+    extra_fit (*_*) and name CA, reference=1ake_A, cycles=0, object=aln
+    pca_plot aln, 1ake_* 4ake_*
+
+    fetch 1ubq 2k39, async=0
+    align 2k39, 1ubq and guide, cycles=0, object=aln2
+    color blue, 1ubq
+    color orange, 2k39
+    pca_plot aln2, filename=pca-ubq.pdf</pre><p class='api'>api: psico.plotting.pca_plot</p><hr size=1><h2 id='pdb2pqr'>pdb2pqr</h2><pre>DESCRIPTION
+
+    Creates a new molecule object from a selection and adds missing atoms,
+    assignes charges and radii using PDB2PQR.
+
+    http://www.poissonboltzmann.org/pdb2pqr/
+
+USAGE
+
+    pdb2pqr name [, selection [, ff [, debump [, opt [, assignonly [, ffout [,
+        ph [, neutraln [, neutralc [, state [, preserve ]]]]]]]]]]]
+
+ARGUMENTS
+
+    name = string: name of object to create or modify
+
+    selection = string: atoms to include in the new object {default: all}
+
+    ff = string: forcefield {default: amber}</pre><p class='api'>api: psico.creating.pdb2pqr</p><hr size=1><h2 id='peptide_rebuild'>peptide_rebuild</h2><pre>DESCRIPTION
+
+    Rebuild the peptide from selection. All atoms which are present in
+    selection will be kept fixed, while atoms missing in selection are
+    placed by sculpting.
+
+USAGE
+
+    peptide_rebuild name [, selection [, cycles [, state ]]]
+
+SEE ALSO
+
+    stub2ala, add_missing_atoms, peptide_rebuild_modeller</pre><p class='api'>api: psico.modelling.peptide_rebuild</p><hr size=1><h2 id='peptide_rebuild_modeller'>peptide_rebuild_modeller</h2><pre>DESCRIPTION
+
+    Remodel the given selection using modeller. This is useful for example to
+    build incomplete sidechains. More complicated modelling tasks are not
+    the intention of this simple interface.
+
+    Side effects: Alters "type" property for MSE residues in selection
+    (workaround for bug #3512313).
+
+USAGE
+
+    peptide_rebuild_modeller name [, selection [, hetatm [, sequence ]]]
+
+ARGUMENTS
+
+    name = string: new object name
+
+    selection = string: atom selection
+
+    hetatm = 0/1: read and model HETATMs (ligands) {default: 0}
+
+    sequence = string: if provided, use this sequence instead of the
+    template sequence {default: None}
+
+    nmodels = int: number of models (states) to generate {default: 1}</pre><p class='api'>api: psico.modelling.peptide_rebuild_modeller</p><hr size=1><h2 id='pir'>pir</h2><pre>DESCRIPTION
+
+    Print sequence in PIR format
+
+SEE ALSO
+
+    fasta</pre><p class='api'>api: psico.fasta.pir</p><hr size=1><h2 id='plane_orientation'>plane_orientation</h2><pre>DESCRIPTION
+
+    Fit plane (for example beta-sheet). Can also be used with
+    angle_between_helices (even though this does not fit helices).
+
+    Returns center and normal vector of plane.</pre><p class='api'>api: psico.orientation.plane_orientation</p><hr size=1><h2 id='polyala'>polyala</h2><pre>DESCRIPTION
+
+    Mutate any residue to Alanine (except Glycines)
+
+SEE ALSO
+
+    stub2ala</pre><p class='api'>api: psico.editing.polyala</p><hr size=1><h2 id='prepwizard'>prepwizard</h2><pre>DESCRIPTION
+
+    Run the SCHRODINGER Protein Preparation Wizard. Builds missing side
+    chains and converts MSE to MET. Other non-default options need to be
+    passed with the "options=" argument.
+
+USAGE
+
+    prepwizard name [, selection [, options [, state ]]]
+
+ARGUMENTS
+
+    name = str: name of object to create
+
+    selection = str: atoms to send to the wizard {default: all}
+
+    options = str: additional command line options for prepwizard
+
+    state = int: object state {default: -1 (current)}</pre><p class='api'>api: psico.creating.prepwizard</p><hr size=1><h2 id='promix'>promix</h2><pre>DESCRIPTION
+
+    Finds rigid segments in two objects with different conformation.
+
+    Requires CSB, http://csb.codeplex.com
+
+ARGUMENTS
+
+    mobile, target = string: atom selections
+
+    K = integer: Number of segments {default: guess}
+
+    prefix = string: Prefix of named segment selections to make
+
+SEE ALSO
+
+    intra_promix
+
+REFERENCE
+
+    Mixture models for protein structure ensembles
+    Hirsch M, Habeck M. - Bioinformatics. 2008 Oct 1;24(19):2184-92</pre><p class='api'>api: psico.fitting.promix</p><hr size=1><h2 id='prosmart'>prosmart</h2><pre>DESCRIPTION
+
+    ProSMART wrapper.
+
+    http://www2.mrc-lmb.cam.ac.uk/groups/murshudov/</pre><p class='api'>api: psico.fitting.prosmart</p><hr size=1><h2 id='ramp_levels'>ramp_levels</h2><pre>DESCRIPTION
+
+    Changes the slot levels of a ramp.
+
+SEE ALSO
+
+    ramp_new, isolevel</pre><p class='api'>api: psico.creating.ramp_levels</p><hr size=1><h2 id='remove_alt'>remove_alt</h2><pre>DESCRIPTION
+
+    Remove alternative location atoms.
+
+USAGE
+
+    remove_alt [selection [, keep]]
+
+ARGUMENTS
+
+    selection = string: atom selection
+
+    keep = string: AltLoc to keep {default: A}</pre><p class='api'>api: psico.editing.remove_alt</p><hr size=1><h2 id='rms_plot'>rms_plot</h2><pre>DESCRIPTION
+
+    Scatterplot with RMSD for all models/states in selection against ref1 and
+    ref2.
+
+ARGUMENTS
+
+    selection = string: atom selection {default: guide}
+
+    ref1 = string: atom selection {default: first model in selection}
+    ref2 = string: atom selection {default: last model in selection}
+
+    state1 = int: object state for ref1
+    state2 = int: object state for ref2
+
+    match = string: in, like, align, none or the name of an alignment object
+    (see "local_rms" help for details) {default: align}
+
+    cur = 0/1: if 1, use rms_cur instead of rms (no fitting) {default: 0}</pre><p class='api'>api: psico.plotting.rms_plot</p><hr size=1><h2 id='rmsf2b'>rmsf2b</h2><pre>DESCRIPTION
+
+    Determine the root mean square fluctuation (RMSF) per atom for a
+    multi-state object and assign b-factor
+
+ARGUMENTS
+
+    selection = string: atom selection {default: name CA}
+
+    linearscale = float: if linearscale &lt;= 0, then use real b-factor equation,
+    else use b=(rmsf*linearscale) {default: 1.0}
+
+SEE ALSO
+
+    spheroid, rmsf_states.py from Robert Campbell</pre><p class='api'>api: psico.editing.rmsf2b</p><hr size=1><h2 id='save'>save</h2><pre>DESCRIPTION
+
+    "save" writes content to a file.
+    
+USAGE
+
+    save filename [, selection [, state [, format ]]]
+
+ARGUMENTS
+
+    filename = string: file path to be written
+
+    selection = string: atoms to save {default: (all)}
+
+    state = integer: state to save {default: -1 (current state)}
+    
+PYMOL API
+
+    cmd.save(string file, string selection, int state, string format)
+
+NOTES
+
+    The file format is automatically chosen if the extesion is one of
+    the supported output formats: pdb, pqr, mol, sdf, pkl, pkla, mmd, out,
+    dat, mmod, cif, pov, png, pse, psw, aln, fasta, obj, mtl, wrl, dae, idtf,
+    or mol2.
+
+    If the file format is not recognized, then a PDB file is written
+    by default.
+
+    For molecular files and where applicable and supported:
+    
+    * if state = -1 (default), then only the current state is written.
+
+    * if state = 0, then a multi-state output file is written.
+    
+SEE ALSO
+
+    load, get_model
+        
+ADDITIONAL NOTE
+
+    This is an overloaded version of the 'save' command that also saves
+    secondary structure and crystal information, if available.</pre><p class='api'>api: psico.exporting.save</p><hr size=1><h2 id='save_colored_fasta'>save_colored_fasta</h2><pre>DESCRIPTION
+
+    Save a html file with colored (by C-alpha atoms) fasta sequence.</pre><p class='api'>api: psico.fasta.save_colored_fasta</p><hr size=1><h2 id='save_movie_mpeg1'>save_movie_mpeg1</h2><pre>DESCRIPTION
+
+    Save movie as MPEG1
+
+    This will not be the best quality possible for the file size, but
+    we were successfull to play those movies in PowerPoint.
+
+    Requires mencoder executable from http://mplayerhq.hu
+
+ARGUMENTS
+
+    filename = string: Filename, should end on '.mpeg'
+
+    mode = normal | draw | ray
+
+    first, last = integer: first and last frame number
+
+    preserve = 0 or 1: delete temporary images if 0 {default: 0}
+
+    fps = integer: frames per second {default: 25}
+
+    twopass = 0 or 1: two pass mode encoding (improves quality) {default: 1}
+
+    vbitrate = integer: average video bitrate {default: 16000}
+    WARNING: 4-16000 (in kbit), 16001-24000000 (in bit)
+
+SEE ALSO
+
+    cmd.movie.produce, http://www.freemol.org</pre><p class='api'>api: psico.moving.save_movie_mpeg1</p><hr size=1><h2 id='save_pdb'>save_pdb</h2><pre>DESCRIPTION
+
+    Save the coordinates of a selection as pdb including the
+    secondary structure information and, if possible, the unit
+    cell. The latter requires the selction of a single object
+
+USAGE
+
+    save_pdb filename, selection [, state [, symm [, ss [, aniso ]]]]
+
+ARGUMENTS
+
+    filename = string: file path to be written
+
+    selection = string: atoms to save {default: (all)}
+                Note: to include the unit cell information you
+                need to select a single object
+
+    state = integer: state to save {default: -1 (current state)}
+
+    symm = 0 or 1: save symmetry info if possible {default: 1}
+
+    ss = 0 or 1: save secondary structure info {default: 1}
+
+    aniso = 0 or 1: save ANISO records {default: 0}
+
+SEE ALSO
+
+    save</pre><p class='api'>api: psico.exporting.save_pdb</p><hr size=1><h2 id='save_settings'>save_settings</h2><pre>DESCRIPTION
+ 
+    Dumps all settings with non-default values to ~/.pymolrc-settings.py
+ 
+    Feature Request: Save settings for later use - ID: 1009951
+    https://sourceforge.net/tracker/?func=detail&aid=1009951&group_id=4546&atid=354546</pre><p class='api'>api: psico.setting.save_settings</p><hr size=1><h2 id='save_traj'>save_traj</h2><pre>DESCRIPTION
+
+    Save coordinates of a multi-state object to a trajectory file (DCD OR CRD).
+
+    Based on http://pymolwiki.org/index.php/Save2traj by Sean Law
+
+USAGE
+
+    save_traj filename [, selection [, format ]]
+
+ARGUMENTS
+
+    filename = string: file path to be written
+
+    selection = string: atoms to save
+
+    format = string: 'dcd' or 'crd' (alias 'charmm' or 'amber') {default:
+    determined from filename extension)</pre><p class='api'>api: psico.exporting.save_traj</p><hr size=1><h2 id='save_xyzr'>save_xyzr</h2><pre>DESCRIPTION
+
+    Write the given selection to an xyzr or xyzrn (determined by extension)
+    file for MSMS.</pre><p class='api'>api: psico.msms.save_xyzr</p><hr size=1><h2 id='sculpt_relax'>sculpt_relax</h2><pre>DESCRIPTION
+
+    Relax the given selection.
+
+    SO FAR ONLY SUPPORTS SELECTIONS WITHIN THE SAME MODEL!
+
+    Do 100 iterations, 75 of them with all terms but low VDW weights,
+    and 25 with only local geometry terms. With default VDW weights and
+    atom clashes, the structure gets distorted very easily!
+
+USAGE
+
+    sculpt_relax selection [, backbone [, neighbors [, model [, cycles ]]]]</pre><p class='api'>api: psico.modelling.sculpt_relax</p><hr size=1><h2 id='select_distances'>select_distances</h2><pre>DESCRIPTION
+
+    Turns a distance object into a named atom selection.
+
+ARGUMENTS
+
+    names = string: names of distance objects (no wildcards!) {default: all
+    measurement objects}
+
+    name = a unique name for the selection {default: sele}
+
+    state = int: object state (-1: current, 0: all states) {default: 1}
+
+SEE ALSO
+
+    get_raw_distances</pre><p class='api'>api: psico.selecting.select_distances</p><hr size=1><h2 id='select_nucseq'>select_nucseq</h2><pre>DESCRIPTION
+
+    Find a nucleic acid sequence pattern in given atom selection.</pre><p class='api'>api: psico.selecting.select_nucseq</p><hr size=1><h2 id='select_pepseq'>select_pepseq</h2><pre>DESCRIPTION
+
+    Find a amino acid sequence pattern (regular expression) in given atom
+    selection. Does not span gaps (unless matched by a wildcard).
+
+USAGE
+
+    select_pepseq pattern [, selection [, name [, state ]]]
+
+ARGUMENTS
+
+    pattern = string: amino acid sequence in one letter code, can be a
+    regular expression pattern.
+
+    selection = string: atom selection of protein (non protein atoms in
+    selection are silently ignored) {default: all})
+
+    name = a unique name for the selection {default: sele}
+
+EXAMPLE
+
+    fetch 1a00, async=0
+    select_pepseq AL[EG]R, chain A+B, sele1
+    select_pepseq ([LIVAM]{3,}), all, sele2
+
+SEE ALSO
+
+    There is the pepseq/ps. selection operator. Example:
+    select actsite, protein and ps. ADFG
+
+    Similar scripts:
+    http://pldserver1.biochem.queensu.ca/~rlc/work/pymol/seq_select.py
+    http://pymolwiki.org/index.php/FindSeq</pre><p class='api'>api: psico.selecting.select_pepseq</p><hr size=1><h2 id='select_sspick'>select_sspick</h2><pre>DESCRIPTION
+
+    Extend selection by connected secondary structure elements.
+
+    Also available as wizard (type: "wizard sspick").
+
+USAGE
+
+    select_sspick selection [, name [, caonly [, quiet ]]]
+
+ARGUMENTS
+
+    selection = string: selection-expression
+
+    name = string: create a named atom selection if not None {default: None}</pre><p class='api'>api: psico.selecting.select_sspick</p><hr size=1><h2 id='set_phipsi'>set_phipsi</h2><pre>DESCRIPTION
+
+    Set phi/psi angles for all residues in selection.
+
+SEE ALSO
+
+    phi_psi, cmd.get_phipsi, set_dihedral, DynoPlot</pre><p class='api'>api: psico.editing.set_phipsi</p><hr size=1><h2 id='set_sequence'>set_sequence</h2><pre>DESCRIPTION
+
+    Alters the residue names according to given sequence
+
+ARGUMENTS
+
+    sequence = string: amino acid sequence in one-letter code
+
+    selection = string: atom selection {default: all}
+
+    start = int: residue number to start from {default: 1}</pre><p class='api'>api: psico.editing.set_sequence</p><hr size=1><h2 id='sidechaincenters'>sidechaincenters</h2><pre>DESCRIPTION
+
+    Creates an object with sidechain representing pseudoatoms for each residue
+    in selection.
+
+    Two methods are available:
+    (1) Sidechain interaction centers as defined by Bahar and Jernigan 1996
+        http://www.ncbi.nlm.nih.gov/pubmed/9080182
+    (2) Sidechain centroids, the pseudoatom is the centroid of all atoms except
+        hydrogens and backbone atoms (N, C and O).
+
+NOTE
+
+    With method "bahar1996", if a residue has all relevant sidechain center
+    atoms missing (for example a MET without SD), it will be missing in the
+    created pseudoatom object.
+
+    With method "centroid", if you want to exclude C-alpha atoms from
+    sidechains, modify the selection like in this example:
+
+    sidechaincenters newobject, all and (not name CA or resn GLY), method=2
+
+USAGE
+
+    sidechaincenters object [, selection [, method ]]
+
+ARGUMENTS
+
+    object = string: name of object to create
+
+    selection = string: atoms to consider {default: (all)}
+
+    method = string: bahar1996 or centroid {default: bahar1996}
+
+    name = string: atom name of pseudoatoms {default: PS1}
+
+SEE ALSO
+
+    pseudoatom</pre><p class='api'>api: psico.creating.sidechaincenters</p><hr size=1><h2 id='snp_ncbi'>snp_ncbi</h2><pre>DESCRIPTION
+
+    Selects all nsSNPs from NCBI (dbSNP) in given structure. Does a sequence
+    alignment of reference protein sequence and PDB sequence.
+
+USAGE
+
+    snp_ncbi query [, selection [, label [, name [, quiet]]]]
+
+ARGUMENTS
+
+    query = string: Entrez query, for example a protein accession
+
+    ... see snp_uniprot
+
+EXAMPLE
+
+    fetch 3HBT
+    snp_ncbi NP_001092.1[accn], chain A
+
+SEE ALSO
+
+    snp_uniprot</pre><p class='api'>api: psico.snp.snp_ncbi</p><hr size=1><h2 id='snp_uniprot'>snp_uniprot</h2><pre>DESCRIPTION
+
+    Selects all UniProt annotated nsSNPs (natural variants) in given
+    structure. Does a sequence alignment of UniProt sequence and PDB
+    sequence.
+
+USAGE
+
+    snp_uniprot uniprotname [, selection [, label [, name [, quiet]]]]
+
+ARGUMENTS
+
+    uniprotname = string: UniProt reference (like HBB_HUMAN or P68871)
+
+    selection = string: atom selection
+
+    label = 0 or 1: Label CA atoms of nsSNPs with mutation {default: 1}
+
+    name = string: name of new selection {default: nsSNPs}
+
+EXAMPLE
+
+    fetch 3HBT
+    snp_uniprot ACTG_HUMAN, chain A
+
+SEE ALSO
+
+    snp_ncbi</pre><p class='api'>api: psico.snp.snp_uniprot</p><hr size=1><h2 id='spectrum_states'>spectrum_states</h2><pre>DESCRIPTION
+
+    Color each state in a multi-state object different.
+
+    (c) 2011 Takanori Nakane and Thomas Holder
+
+USAGE
+
+    spectrum_states [ selection [, representations [, color_list [, first [, last ]]]]]
+
+ARGUMENTS
+
+    selection = string: object names (works with complete objects only)
+    {default: all}
+
+    representations = string: space separated list of representations
+    {default: cartoon ribbon}
+
+    color_list = string: space separated list of colors {default: blue cyan
+    green yellow orange red}
+
+SEE ALSO
+
+    spectrum, spectrumany</pre><p class='api'>api: psico.viewing.spectrum_states</p><hr size=1><h2 id='spectrumany'>spectrumany</h2><pre>DESCRIPTION
+
+    Define a color spectrum with as many color-stops as you like (at least 2).
+
+USAGE
+
+    spectrumany expression, color_list [, selection [, minimum [, maximum ]]]
+
+ARGUMENTS
+
+    expression = count, resi, b, q, or pc: respectively, atom count, residue
+    index, temperature factor, occupancy, or partial charge {default: count}
+
+    color_list = string: Space separated list of colors
+
+    ... all other arguments like with `spectrum` command
+
+EXAMPLE
+
+    spectrumany count, forest green yellow white
+    spectrumany b, red yellow white, (polymer), maximum=100.0
+
+SEE ALSO
+
+    spectrum</pre><p class='api'>api: psico.viewing.spectrumany</p><hr size=1><h2 id='split_molecules'>split_molecules</h2><pre>DESCRIPTION
+
+    Create a single object for each molecule (covalently connected entity) in
+    selection (ignores solvent).
+
+SEE ALSO
+
+    split_chains, split_states</pre><p class='api'>api: psico.editing.split_molecules</p><hr size=1><h2 id='sst'>sst</h2><pre>DESCRIPTION
+
+    Secondary structure assignment with SST.
+    http://lcb.infotech.monash.edu.au/sstweb/
+
+SEE ALSO
+
+    dss, dssp, stride</pre><p class='api'>api: psico.editing.sst</p><hr size=1><h2 id='stride'>stride</h2><pre>DESCRIPTION
+
+    Secondary structure assignment with STRIDE.
+    http://webclu.bio.wzw.tum.de/stride/
+
+SEE ALSO
+
+    dss, dssp</pre><p class='api'>api: psico.editing.stride</p><hr size=1><h2 id='stub2ala'>stub2ala</h2><pre>DESCRIPTION
+
+    Mutate stub residues to ALA
+
+SEE ALSO
+
+    polyala</pre><p class='api'>api: psico.editing.stub2ala</p><hr size=1><h2 id='supercell'>supercell</h2><pre>DESCRIPTION
+
+    Draw a supercell, as requested by Nicolas Bock on the pymol-users
+    mailing list (Subject: [PyMOL] feature request: supercell construction
+    Date: 04/12/2010 10:12:17 PM (Mon, 12 Apr 2010 14:12:17 -0600))
+
+USAGE
+
+    supercell a, b, c [, object [, color [, name [, withmates]]]]
+
+ARGUMENTS
+
+    a, b, c = integer: repeat cell in x,y,z direction a,b,c times
+    {default: 1,1,1}
+
+    object = string: name of object to take cell definition from
+
+    color = string: color of cell {default: blue}
+
+    name = string: name of the cgo object to create {default: supercell}
+
+    withmates = bool: also create symmetry mates in displayed cells
+    {default: 1}
+
+SEE ALSO
+
+    show cell</pre><p class='api'>api: psico.xtal.supercell</p><hr size=1><h2 id='symdiff'>symdiff</h2><pre>DESCRIPTION
+
+    Symmetric difference between two molecules
+
+SEE ALSO
+
+    diff</pre><p class='api'>api: psico.selecting.symdiff</p><hr size=1><h2 id='symexpcell'>symexpcell</h2><pre>DESCRIPTION
+
+    Creates all symmetry-related objects for the specified object that
+    occur with their bounding box center within the unit cell.
+
+USAGE
+
+    symexpcell prefix, object, [a, b, c]
+
+ARGUMENTS
+
+    prefix = string: prefix of new objects
+
+    object = string: object for which to create symmetry mates
+
+    a, b, c = integer: create neighboring cell {default: 0,0,0}
+
+SEE ALSO
+
+    symexp</pre><p class='api'>api: psico.xtal.symexpcell</p><hr size=1><h2 id='theseus'>theseus</h2><pre>DESCRIPTION
+
+    Structural superposition of two molecules with maximum likelihood.
+
+    THESEUS: Maximum likelihood multiple superpositioning
+    http://www.theseus3d.org
+
+ARGUMENTS
+
+    mobile = string: atom selection for mobile atoms
+
+    target = string: atom selection for target atoms
+
+    match = string: in, like, align, none or the name of an alignment object
+    (see "local_rms" help for details) {default: align}
+
+    cov = 0/1: 0 is variance weighting, 1 is covariance weighting (slower)
+    {default: 0}
+
+SEE ALSO
+
+    align, super, cealign</pre><p class='api'>api: psico.fitting.theseus</p><hr size=1><h2 id='tmalign'>tmalign</h2><pre>DESCRIPTION
+
+    TMalign wrapper. You may also use this as a TMscore or MMalign wrapper
+    if you privide the corresponding executable with the "exe" argument.
+
+    Reference: Y. Zhang and J. Skolnick, Nucl. Acids Res. 2005 33, 2302-9
+    http://zhanglab.ccmb.med.umich.edu/TM-align/
+
+ARGUMENTS
+
+    mobile, target = string: atom selections
+
+    mobile_state, target_state = int: object states {default: 1}
+
+    args = string: Extra arguments like -d0 5 -L 100
+
+    exe = string: Path to TMalign (or TMscore, MMalign) executable
+    {default: TMalign}
+
+    ter = 0/1: If ter=0, then ignore chain breaks because TMalign will stop
+    at first TER record {default: 0}</pre><p class='api'>api: psico.fitting.tmalign</p><hr size=1><h2 id='update_identifiers'>update_identifiers</h2><pre>DESCRIPTION
+
+    Transfers segi, chain, and resi identifiers from one selection to another.
+    This works by mapping old to new identifiers and alters also not aligned
+    atoms (works if any other atom from the same residue got aligned).</pre><p class='api'>api: psico.editing.update_identifiers</p><hr size=1><h2 id='volume_esp'>volume_esp</h2><pre>DESCRIPTION
+
+    Create a volume object from a map object with default coloring
+    for electrostatic potential (similar to positive and negative
+    isosurface).
+
+ARGUMENTS
+
+    name = string: name for the new volume object
+
+    map = string: name of the map object to use
+
+    stops = list of floats: 2 or 3 values in standard deviations for creating
+    the volume ramp {default: [0.1, 1.0]}
+
+    neg = string: color for negative volume {default: red}
+
+    pos = string: color for positive volume {default: blue}
+
+    opacity = float: maximum opacity in volume ramp {default: 0.2}
+
+SEE ALSO
+
+    volume</pre><p class='api'>api: psico.electrostatics.volume_esp</p><hr size=1><h2 id='volume_fofc'>volume_fofc</h2><pre>DESCRIPTION
+
+    Create a difference density volume object.
+
+SEE ALSO
+
+    volume_esp</pre><p class='api'>api: psico.electrostatics.volume_fofc</p><hr size=1><h2 id='xfit'>xfit</h2><pre>DESCRIPTION
+
+    Weighted superposition of the model in the first selection on to the model
+    in the second selection. The weights are estimated with maximum likelihood.
+
+    The result should be very similar to "theseus".
+
+    Requires CSB, http://csb.codeplex.com
+
+ARGUMENTS
+
+    mobile = string: atom selection
+ 
+    target = string: atom selection
+
+    mobile_state = int: object state of mobile selection {default: current}
+
+    target_state = int: object state of target selection {default: current}
+
+    load_b = 0 or 1: save -log(weights) into B-factor column {default: 0}
+
+SEE ALSO
+
+    intra_xfit, align, super, fit, cealign, theseus</pre><p class='api'>api: psico.fitting.xfit</p></body></html>
