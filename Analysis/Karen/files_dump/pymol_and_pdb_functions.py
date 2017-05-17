@@ -1,39 +1,13 @@
-import numpy as np
-
 def start_pymol():
     import sys
     import pymol
-    pymol.pymol_argv = ['pymol','-qc'] 
+    pymol.pymol_argv = ['pymol','-qc'] #+ sys.argv[1😏
     stdout = sys.stdout
     stderr = sys.stderr
     pymol.finish_launching()
     sys.stdout = stdout
     sys.stderr = stderr
     cmd = pymol.cmd
-
-def get_distance_between_atoms(atom1, atom2):
-    diff_vector  = atom1.coord - atom2.coord
-    return np.sqrt(np.sum(diff_vector * diff_vector))
-
-
-def get_distance_between_residues(residue_one, residue_two, mode='min'):
-    assert mode in ['CA', 'min']
-    if mode == 'CA':
-        diff_vector  = residue_one["CA"].coord - residue_two["CA"].coord
-        return np.sqrt(np.sum(diff_vector * diff_vector))
-    if mode == 'min':
-        distances = []
-        for atom1 in residue_one.get_atom():
-            for atom2 in residue_two.get_atom():
-                distances.append(get_distance_between_atoms(atom1, atom2))
-        return min(distances)
-
-    
-def get_distance_to_other_residues(residue, other_residues, mode='min'):
-    distances = np.zeros(len(other_residues))
-    for index, other_residue in enumerate(other_residues):
-        distances[index] = get_distance_between_residues(residue, other_residue, mode=mode)
-    return distances
 
 
 def calc_dist_matrix(chain1, chain2, stripping=True, mode='min'):
