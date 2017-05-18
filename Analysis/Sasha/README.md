@@ -13,6 +13,8 @@ Folder structure
 - rosetta_runs/
 -- runYYMMDD-xxxx.gz  (original scorefile)
 -- runYYMMDD-results.csv ['aa_seq','mut_list_Scer','ddg_score1','ddg_score2','ddg_score3','segment']
+-- run-170503-results-with-explicit-ddG.csv with ddG field ['aa_seq','mut_list_Scer','ddg_score1','ddg_score2','ddg_score3','segment','ddG']
+
 - B-Factor-iTasser.csv  -  it's just reformatted file:
         HIS3InterspeciesEpistasis/Analysis/Karen/files_dump/structure_predictions/HIS3_saccharomyces_cerevisiae__itasser_all_predictions/lscore.txt"
 
