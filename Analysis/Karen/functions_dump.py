@@ -260,7 +260,7 @@ def white_and_beautiful(representation='cartoon'):
     cmd.show(representation, 'all')
     cmd.select('waters', 'name o')
     cmd.hide('everything', 'waters')
-    cmd.color('gray90', 'all')
+    cmd.color('white', 'all')
     cmd.set('bg_rgb', '(1,1,1)')
     cmd.set('surface_quality', '1')
     cmd.set('transparency', '0.5')
