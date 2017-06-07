@@ -4,7 +4,7 @@
 %
 % LBC May 11, 2017
 %
-
+% Figure 4B -- data version of sigmoid cliff to syn w/Katay's cartoon
 %% load data
 SegN = 7 ;
 cd('/Users/lcarey/Desktop/HIS3scratch/CliffCausesUnfitIntermediateStates/');
@@ -32,11 +32,11 @@ distance_matrix = squareform(pdist( cell2mat(T.aa_num) ,'hamming')) .* length(T.
 % used for picking anchor genotypes
 FitThreshold = 0.95 ; 
 UnFitThreshold = 0.4 ;
+N_Random_Fit_Pairs = 1e4;
 
 
 %% pick fit pairs
 idx_fit = find(T.s >= FitThreshold)  ; 
-N_Random_Fit_Pairs = 3e4;
 chosen_fit_pairs = NaN( N_Random_Fit_Pairs , 2);
 for I = 1:N_Random_Fit_Pairs
     chosen_fit_pairs(I,:) = sort(randsample( idx_fit , 2)') ; 
@@ -87,13 +87,21 @@ save( [ 'CliffCausesUnfitIntermediateStates__Seg' num2str(SegN) ] ,'DS'  )
 %%
 %% Pretty Pictures
 
+RED = [241  98  108] / 255 ;
+BLUE = [107  206  242] / 255 ;
+GREY = [192 191 191 ] / 255 ; 
+PINK = [240 0 98] / 255 ;
+BLUE2 = [0 172 241] / 255 ; 
+COLORS = flipud(gray(100));
+COLORS = COLORS(5:50,:);
 Q = DS( cellfun(@length,DS.IntermediateStates_fitness) > 100 ,:);
+Q = sortrows( Q ,{ 'IntermediateStates_PctUnfit' 'ParentStates_MeanFitPot'} );
 
 
 figname = 'IntermediateStatesFitnessCliff.eps';
 delete(figname);
 idxs_to_plot = unique([ find(Q.IntermediateStates_PctUnfit>20)' 1:10:length(Q)]) ;
-idxs_to_plot = randsample( idxs_to_plot , 3);
+%   idxs_to_plot = randsample( idxs_to_plot , 3);
 X = T.fitnessPotential ; 
 Y = T.s ;
 % a few examples
@@ -101,11 +109,11 @@ for I = idxs_to_plot
     fh = figure('units','centimeters','position',[5 5 5 5]);
     hold on ; 
     dscatter( X , Y );
-    colormap(flipud(gray(100)));
+    colormap( COLORS ) ;
     axis tight;
-    plot( X( Q.IntermediateStates_idx{I} ) , Y( Q.IntermediateStates_idx{I} ) , '.','Color',[.5 0 .5]);
-    plot( X( Q.Seq1_idx(I)) , Y( Q.Seq1_idx(I) ) ,'o','MarkerFaceColor','b','Color','b');
-    plot( X( Q.Seq2_idx(I)) , Y( Q.Seq2_idx(I) ) ,'o','MarkerFaceColor','r','Color','r');
+    plot( X( Q.IntermediateStates_idx{I} ) , Y( Q.IntermediateStates_idx{I} ) , '.','Color',BLUE2);
+    plot( X( Q.Seq1_idx(I)) , Y( Q.Seq1_idx(I) ) ,'o','MarkerFaceColor',PINK,'Color','k','LineWidth',0.5);
+    plot( X( Q.Seq2_idx(I)) , Y( Q.Seq2_idx(I) ) ,'o','MarkerFaceColor',PINK,'Color','k','LineWidth',0.5);
     set(gca,'xtick',[]);
     set(gca,'ytick',[]);
     xlabel('Fitness potential');
@@ -114,8 +122,15 @@ for I = idxs_to_plot
     
     line( xlim , [FitThreshold FitThreshold],'LineStyle','--','Color',[.7 .7 .7])
     line( xlim , [UnFitThreshold UnFitThreshold],'LineStyle','--','Color',[.7 .7 .7])
+
+    xlim([min(xlim)*1.02 max(xlim)])
+    ylim([-0.015 1.15])
+   
+    text( max(xlim)/3 , 1.025 , sprintf('%0.0f%%' ,  Q.IntermediateStates_PctFit(I) ) )
+    text( max(xlim)/3 , 0.65 , sprintf('%0.0f%%' ,  Q.IntermediateStates_PctIntfit(I) ) )
+    text( max(xlim)/3 , 0.2  , sprintf('%0.0f%%' ,  Q.IntermediateStates_PctUnfit(I) ) )
     
-    title( sprintf('%0.0f%% %0.0f%%  %0.0f%% ' , Q.IntermediateStates_PctUnfit(I)  , Q.IntermediateStates_PctIntfit(I) , Q.IntermediateStates_PctFit(I)  ) );
+   % title( sprintf('%0.0f%% %0.0f%%  %0.0f%% ' , Q.IntermediateStates_PctUnfit(I)  , Q.IntermediateStates_PctIntfit(I) , Q.IntermediateStates_PctFit(I)  ) );
     print('-dpsc2',figname,'-append');
     close
 end
@@ -133,11 +148,18 @@ end
 %% summary figures;
 fh = figure('units','centimeters','position',[5 5 5 5 ]);
 idx = DS.HD == 7 ; 
-plot( DS.ParentStates_MeanFitPot(idx) , DS.IntermediateStates_PctUnfit(idx) ,'ok','MarkerFaceColor',[.7 .7 .7]);
-title( sprintf('Pearson = %0.02f' , corr( DS.ParentStates_MeanFitPot(idx) , DS.IntermediateStates_PctUnfit(idx) )))
-axis tight;
+scatter( DS.ParentStates_MeanFitPot(idx) , DS.IntermediateStates_PctUnfit(idx) , 20 ,[.75 .75 .75] , 'filled', 'MarkerFaceAlpha', 0.5 ,'MarkerEdgeColor','k','MarkerEdgeAlpha',0.2);
+%title( sprintf('Pearson = %0.02f' , corr( DS.ParentStates_MeanFitPot(idx) , DS.IntermediateStates_PctUnfit(idx) )))
+ corr( DS.ParentStates_MeanFitPot(idx) , DS.IntermediateStates_PctUnfit(idx))
+%axis tight;
+xlim([-10 -2])
+ylim([-0.5 max(ylim)])
+%set(gca,'xtick',[])
+set(gca,'xtick',-10:2:0)
 xlabel('Mean fitness potential')
-ylabel('% unfit intermediates')
+ylabel('% of unfit intermediates')
+
+%%
 print('-dpsc2', [ num2str(SegN) '.eps']);
 close;
 %
