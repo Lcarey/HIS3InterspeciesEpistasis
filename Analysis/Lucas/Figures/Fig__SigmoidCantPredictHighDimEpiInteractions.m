@@ -1,6 +1,9 @@
-%% Fig__SigmoidCantPredictHighDimEpiInteractions.m
+function Q = Fig__SigmoidCantPredictHighDimEpiInteractions( SegN )
+%% Q = Fig__SigmoidCantPredictHighDimEpiInteractions( SegN )
 %  scatter plot of how poorly the model does (residuals) vs dimensionality of sign epistasis
 %  figure 4f in the intial submission. 
+% 
+%
 % LBC
 
 % load data
@@ -47,6 +50,8 @@ BigGG = grpstats( BigGG , {'VarPos' 'Perm' } ,'sum' ,'DataVars','sum_HasSignEpi'
 %% calculate correlation
 
 Q = innerjoin( BigGG , dataset2table(G) ,'Key',{'VarPos' 'Perm'});
+Q.SegN = repmat( SegN , height(Q) , 1) ; 
+Q.DateTimeForThisAnalysis = repmat( datetime() , height(Q) , 1) ; 
 
 X = Q.sum_sum_HasSignEpi ;
 Y = Q.mean_SqrDiffPredReal_FitImpact ; 
