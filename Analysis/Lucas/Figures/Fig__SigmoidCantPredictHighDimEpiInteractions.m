@@ -53,6 +53,8 @@ Q.DateTimeForThisAnalysis = repmat( datetime() , height(Q) , 1) ;
 
 X = Q.sum_sum_HasSignEpi ;
 Y = Q.mean_SqrDiffPredReal_FitImpact ; 
+
+
 fh = figure('units','centimeters','position',[5 5 3.5 4]);
 plot( X , Y  ,'ok','MarkerFaceColor',[.7 .7 .7])
 [c,p] = corr(X,Y);
