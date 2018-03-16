@@ -12,12 +12,10 @@ load( [ DATADIR 'Analysis/Lucas/Data/SignEpi_Ronly.mat' ] )
 
 BigG = readtable([ DATADIR 'Analysis/Lucas/Data/SignEpiPairs.xlsx' ] );
 
-
 RESID = readtable( [ DATADIR 'Analysis/Katya/NN/residuals/S2.csv' ] );
 RESID.PredictedFitness = RESID.predictedMinusObserved + RESID.observed  ;
 
-%% which segment to work with
-SegN = 2 ; 
+% which segment to work with
 
 R = s(SegN).R ;
 % clear 's';
