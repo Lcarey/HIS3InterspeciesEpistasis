@@ -25,20 +25,21 @@ R = s(SegN).R ;
 %   
 %  G will have the avg residual between actual and predict fitness impact
 %   this is very very very slow
-tic ; 
 R.PredFitSeq1 = NaN( length(R)  , 1);
 R.PredFitSeq2 = NaN( length(R)  , 1);
+tic ; 
 for I = 1:length(R)
     R.PredFitSeq1(I) = RESID.PredictedFitness( strcmp( RESID.aa_seq , R.Seq1{I})) ;
     R.PredFitSeq2(I) = RESID.PredictedFitness( strcmp( RESID.aa_seq , R.Seq2{I})) ;
 end
-R.PredFitImpact = R.PredFitSeq1 - R.PredFitSeq2 ;
+toc
 
+R.PredFitImpact = R.PredFitSeq1 - R.PredFitSeq2 ;
 R.AbsDiffPredReal_FitImpact = abs( R.PredFitImpact - R.FitImpact );
 R.SqrDiffPredReal_FitImpact = ( R.PredFitImpact - R.FitImpact ).^2;
 
 G = grpstats( R ,{'VarPos' 'Perm'} ,{'mean' 'median' 'std'} ,'DataVars' , {'SqrDiffPredReal_FitImpact' 'AbsDiffPredReal_FitImpact'});
-toc
+
 %% Count how often  each substitution exhibits sign epistasis. 
 BigG = BigG( BigG.SegN == SegN,:);
 BigG.HasSignEpi = BigG.pBon < 0.05 ;
