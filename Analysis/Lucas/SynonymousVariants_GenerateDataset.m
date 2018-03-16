@@ -25,3 +25,15 @@ axis tight ;
 set(gca,'xtick',-20:1:20)
 set(gca,'ytick',0:.1:2)
 grid on; 
+
+%% find an AA seq with lots of synonymous variants, and look at the fitness distribution of the syn variants
+G = grpstats( T , 'aa_seq' , 'median' ,  'DataVars' , 's');
+G = sortrows( G  , 'GroupCount' ,'descend');
+
+most_common_group_nt_seq_index = strcmp( T.aa_seq , G.aa_seq{1} ) ;
+
+figure;
+histogram( T.s( most_common_group_nt_seq_index) , 0:.01:0.55 )
+xlabel('Fitness')
+ylabel('# of synonymous variants')
+title( T.aa_seq( find(most_common_group_nt_seq_index,1)))

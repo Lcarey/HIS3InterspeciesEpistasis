@@ -7,6 +7,7 @@
 % end
 
 %%  make inidividual segment figures
+cd('/Users/lcarey/Desktop/HIS3scratch/FigureLBCF1');
 figbasename = 'CompareUnfitFreqBetweenFit_VS_EntireLibrary_';
 segment_files = dir('Segment*.mat');
 for SegFileI = 1:numel(segment_files)
@@ -103,6 +104,7 @@ for SegFileI = 1:numel(segment_files)
 end
 
 %% make one figure combining data for all segments
+cd('/Users/lcarey/Desktop/HIS3scratch/FigureLBCF1');
 
 figname = 'CompareUnfitFreqBetweenFit_VS_EntireLibrary.eps';
 delete(figname);
