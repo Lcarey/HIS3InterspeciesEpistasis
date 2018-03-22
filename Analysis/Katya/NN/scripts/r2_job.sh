@@ -42,8 +42,6 @@
 #SBATCH --export=NONE
 unset SLURM_EXPORT_ENV
 #
-#for single-CPU jobs make sure that they use a single thread
-export OMP_NUM_THREADS=1
 #
 #load an CUDA software module
 module load tensorflow/python-2.7/1.3.0 
