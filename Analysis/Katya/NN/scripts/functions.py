@@ -231,4 +231,4 @@ def read_data_all_positions(chunk):
         if data.mutList[i] != '':
             nn_genotypes_values[i] = makeBinary(unique_mutations, data.mutList[i])[0]
     
-    return nn_genotypes_values, nn_brightness_values, unique_mutations, aa_seq, data.mutList
+    return nn_genotypes_values, nn_brightness_values, unique_mutations, aa_seq, mut_list
