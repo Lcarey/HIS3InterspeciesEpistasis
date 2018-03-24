@@ -1,3 +1,0 @@
-1) Navigate to the 'HIS3InterspeciesEpistasis/Analysis/Katya/Fig2/Build' folder
-2) Run $ python -m SimpleHTTPServer 8888
-3) In Google Chrome (or any other web browser) go to http://localhost:8888/
