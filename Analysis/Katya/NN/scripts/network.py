@@ -4,22 +4,20 @@ from scipy.stats import spearmanr, pearsonr
 from optparse import OptionParser
 import matplotlib
 matplotlib.use('Agg')
+from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import pyplot as plt
+import seaborn as sns
 from keras.callbacks import EarlyStopping
 
-
+#min_max_scaler = MinMaxScaler()
+n_iter = 100
 parser = OptionParser()
 parser.add_option("-c", "--chunk", type="string",
                   help="Select the chunk to process",
                   dest="chunk")
-parser.add_option("-n", "--epochs", type="int",
-                  help="Number of epochs to perform the iterations for",
-                  dest="n_epochs")
+
 
 (options, args) = parser.parse_args()
-
-#min_max_scaler = MinMaxScaler()
-n_iter = options.n_epochs
 
 chunk = options.chunk
 print (chunk)
@@ -27,7 +25,7 @@ print (chunk)
 data, labels, unique_mutations[chunk], aa_seq, mut_list = read_data_all_positions(chunk)
 
 print 'Splitting the data'
-x_train, x_valid, y_train, y_valid = train_test_split(data, labels, test_size = 0.01)
+x_train, x_valid, y_train, y_valid = train_test_split(data, labels, test_size = 0.05)
 
 n_neurons = []
 
@@ -38,7 +36,7 @@ r_train=[]
 
 r2_weights = []
 
-for i in range(1,22,4):
+for i in range(1,11):
     
     print '\nNumber of weights combinations = ', i
     temp_mse_train_list=[]
@@ -47,7 +45,7 @@ for i in range(1,22,4):
     temp_r_val_list=[]
     temp_weights_r2={}
     it=0
-    loop_count=10
+    loop_count=5
     
     while it<loop_count and loop_count<100:
         print it
@@ -77,8 +75,8 @@ for i in range(1,22,4):
         
         temp_mse_val = mean_squared_error(y_valid,predicted_val)
         temp_mse_train = mean_squared_error(y_train,predicted_train)
-        temp_r_val = r2_score(y_valid,predicted_val)
-        temp_r_train = r2_score(y_train,predicted_train)
+        temp_r_val = pearsonr(y_valid,predicted_val)[0]
+        temp_r_train = pearsonr(y_train,predicted_train)[0]
         
         it+=1
         
@@ -107,34 +105,12 @@ for i in range(1,22,4):
     
     if i>1:
         r2_weights.append([np.median(temp_weights_r2[x]) for x in temp_weights_r2])
-
-plt.figure(figsize=[6,7])
+        
+plt.figure(figsize=[6,6])
 for i,r_list in enumerate(r_val):
-    plt.plot([i*4+1]*len(r_list),r_list,'o',alpha=0.5,color='#283149')
-    plt.plot([i*4+0.5,i*4+1.5],[np.median(r_list)]*2,'-',lw=0.9,color='#DA0463')
+    plt.plot([i+1]*len(r_list),[float(x)**2 for x in r_list],'o',alpha=0.5,color='#283149',ms=5)
+    plt.plot([i+0.5,i+1.5],[np.median([float(x)**2 for x in r_list])]*2,'-',color='#DA0463')
 plt.grid('--k',lw=0.5)
-plt.title(chunk,fontsize=15)
-plt.ylabel('R2 between predicted and true values',fontsize=13)
-plt.xlabel('Number of linear combinations of substitutions',fontsize=13)
-plt.savefig('/nfs/scistore08/kondrgrp/eputints/Jupyter/HIS3InterspeciesEpistasis/Analysis/Katya/NN/complexity/20_iterations/r_'+chunk+'.pdf')
-
-plt.figure(figsize=[6,7])
-for i,mse_list in enumerate(mse_val):
-    plt.plot([i*4+1]*len(mse_list),mse_list,'o',alpha=0.5,color='#283149')
-    plt.plot([i*4+0.5,i*4+1.5],[np.median(mse_list)]*2,'-',lw=0.9,color='#DA0463')
-plt.grid('--k',lw=0.5)
-plt.title(chunk,fontsize=15)
-plt.ylabel('MSE',fontsize=13)
-plt.xlabel('Number of linear combinations of substitutions',fontsize=13)
-plt.savefig('/nfs/scistore08/kondrgrp/eputints/Jupyter/HIS3InterspeciesEpistasis/Analysis/Katya/NN/complexity/20_iterations/mse_'+chunk+'.pdf')
-
-plt.figure(figsize=[6,7])
-for i,r2_list in enumerate(r2_weights):
-    plt.plot([i*4+1]*len(r2_list),r2_list,'o',alpha=0.5,color='#283149')
-    plt.plot([i*4+0.5,i*4+1.5],[np.median(r2_list)]*2,'-',lw=0.9,color='#DA0463')
-plt.ylim(-1,1)
-plt.title(chunk,fontsize=15)
-plt.grid('--k',lw=0.5)
-plt.ylabel('Median Spearman R between sets of weights',fontsize=13)
-plt.xlabel('Number of linear combinations of substitutions',fontsize=13)
-plt.savefig('/nfs/scistore08/kondrgrp/eputints/Jupyter/HIS3InterspeciesEpistasis/Analysis/Katya/NN/complexity/20_iterations/r2_weights_'+chunk+'.pdf')
+plt.xticks(fontsize=15)
+plt.yticks(fontsize=15)
+plt.savefig('/nfs/scistore08/kondrgrp/eputints/Jupyter/HIS3InterspeciesEpistasis/Analysis/Katya/NN/tmp/r2_'+chunk+'.pdf')

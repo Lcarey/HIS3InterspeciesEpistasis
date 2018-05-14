@@ -1,0 +1,80 @@
+#/usr/lib/python2.7/dist-packages/ipykernel/__main__.py -f /nfs/scistore08/kondrgrp/eputints/Jupyter/jupyter/kernel-0916c6f1-4cef-4ce9-907d-65f4267307c7.json
+# GMT Wed Apr  4 15:55:00 2018
+# 
+1HR 8
+29KT {'color': 'gray', 'thickness': 2}
+22AE {'color': 'gray', 'thickness': 2}
+26PS {'color': 'gray', 'thickness': 2}
+9AS {'color': 'gray', 'thickness': 2}
+26LP {'color': 'gray', 'thickness': 2}
+26LS {'color': 'gray', 'thickness': 2}
+27NT {'color': 'gray', 'thickness': 2}
+23AS {'color': 'gray', 'thickness': 2}
+3KT 7
+29KT {'color': 'gray', 'thickness': 2}
+22AE {'color': 'gray', 'thickness': 2}
+9AS {'color': 'gray', 'thickness': 2}
+26LP {'color': 'gray', 'thickness': 2}
+26LS {'color': 'gray', 'thickness': 2}
+28EG {'color': 'gray', 'thickness': 2}
+27NT {'color': 'gray', 'thickness': 2}
+29KT 10
+30DN {'color': 'gray', 'thickness': 2}
+22AE {'color': 'gray', 'thickness': 2}
+1HY {'color': 'gray', 'thickness': 2}
+28EG {'color': 'gray', 'thickness': 2}
+26LP {'color': 'gray', 'thickness': 2}
+26LS {'color': 'gray', 'thickness': 2}
+9AS {'color': 'gray', 'thickness': 2}
+27NT {'color': 'gray', 'thickness': 2}
+3KN {'color': 'gray', 'thickness': 2}
+23AS {'color': 'gray', 'thickness': 2}
+30DN 0
+22AE 9
+26PS {'color': 'gray', 'thickness': 2}
+1HY {'color': 'gray', 'thickness': 2}
+9AS {'color': 'gray', 'thickness': 2}
+26LP {'color': 'gray', 'thickness': 2}
+26LS {'color': 'gray', 'thickness': 2}
+28EG {'color': 'gray', 'thickness': 2}
+27NT {'color': 'gray', 'thickness': 2}
+3KN {'color': 'gray', 'thickness': 2}
+23AS {'color': 'gray', 'thickness': 2}
+26PS 2
+9AS {'color': 'gray', 'thickness': 2}
+23AS {'color': 'gray', 'thickness': 2}
+1HY 6
+9AS {'color': 'gray', 'thickness': 2}
+26LP {'color': 'gray', 'thickness': 2}
+26LS {'color': 'gray', 'thickness': 2}
+27NT {'color': 'gray', 'thickness': 2}
+3KN {'color': 'gray', 'thickness': 2}
+23AS {'color': 'gray', 'thickness': 2}
+21KR 1
+28EG {'color': 'gray', 'thickness': 2}
+9AS 5
+26LP {'color': 'gray', 'thickness': 2}
+26LS {'color': 'gray', 'thickness': 2}
+27NT {'color': 'gray', 'thickness': 2}
+3KN {'color': 'gray', 'thickness': 2}
+23AS {'color': 'gray', 'thickness': 2}
+24IT 1
+26LS {'color': 'gray', 'thickness': 2}
+26LP 5
+28EG {'color': 'gray', 'thickness': 2}
+27NT {'color': 'gray', 'thickness': 2}
+3KN {'color': 'gray', 'thickness': 2}
+23AS {'color': 'gray', 'thickness': 2}
+31DE {'color': 'gray', 'thickness': 2}
+26LS 3
+28EG {'color': 'gray', 'thickness': 2}
+27NT {'color': 'gray', 'thickness': 2}
+23AS {'color': 'gray', 'thickness': 2}
+28EG 1
+27NT {'color': 'gray', 'thickness': 2}
+27NT 1
+3KN {'color': 'gray', 'thickness': 2}
+3KN 1
+23AS {'color': 'gray', 'thickness': 2}
+23AS 0
+31DE 0
