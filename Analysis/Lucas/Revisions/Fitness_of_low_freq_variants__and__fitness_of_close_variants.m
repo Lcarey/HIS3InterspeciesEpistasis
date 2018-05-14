@@ -200,7 +200,7 @@ for SegN = 1:12
     
     nonsense_mutants = sT.aa_seq( logical(sT.nonsense)) ;
     nonsense_mutants_fit = sT.s( logical(sT.nonsense)) ;
-    fit_mutants = sT.aa_seq(sT.size>=3 & sT.s>0.7) ;
+    fit_mutants = sT.aa_seq(sT.size>=3 & sT.s>0.75  ) ;
     fitness_1 = NaN(0);
     fitness_2 = NaN(0);
     fitness_3 = NaN(0);
@@ -226,18 +226,27 @@ for SegN = 1:12
     s2(SegN).fitness_3 = fitness_3 ;
     s2(SegN).fitness_4 = fitness_4 ;
     s2(SegN).fitness_5 = fitness_5 ;
-    
+    save('s2mat','s2')
 end
 %%
+fn = 'fit_of_nonsense_X_away_';
+for SegN = 1:12
 fh = figure('units','centimeters','position',[5 5 8  8]);
 hold on ;
-for I = 1:4
-    [f,x] = ecdf( eval(['fitness_' num2str(I)]) );
+for I = 1:5
+    [f,x] = ecdf( eval(['s2(SegN).fitness_' num2str(I)]) );
     plot(x,f,'LineWidth',3,'DisplayName',num2str(I));
 end
 ylabel('Fraction of genotypes')
 xlabel('Fitness of nonsense mutants')
 grid on ;
 legend( 'location','best')
-%set(gca,'ytick',0:.1:1)
-%xlim([0 0.5])
+set(gca,'ytick',0:.01:1)
+lh = line([0.4 0.4], [0 1],'LineStyle','--','Color',[.5 .5 .5]);
+set(lh,'HandleVisibility','off');
+xlim([0 0.5])
+ylim([0.9 1])
+title(['Segment ' num2str(SegN)]);
+print('-djpeg',[fn num2str(SegN)],'-r300');
+close;
+end
