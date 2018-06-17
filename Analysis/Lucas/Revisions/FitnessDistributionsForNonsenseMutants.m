@@ -19,6 +19,35 @@ for I = 1:12
 end
 
 
+%% plot histogram, cummulative for all segments except 9
+fh = figure('units','centimeters','position',[5 5 7 7]);
+%set(gca,'Visible', 'off') ;
+clrs = get(gca,'ColorOrder');
+nonsense_fitness = NaN(0);
+extant_fitness = NaN(0);
+for I = [1:8 10:12]
+        T = s(I).T ; 
+        T.s(T.s>1.1) = 1.1;
+        nonsense_fitness = vertcat( nonsense_fitness , T.s(logical(T.nonsense)) );
+        extant_fitness = vertcat( extant_fitness ,  T.s(logical(T.nat_lib)) ); 
+end 
+        xlim([0 1.2]) ; 
+        hold on; 
+     	line([0.6 0.6],ylim,'LineStyle','--','Color',[.7 .7 .7],'LineWidth',2)
+        line([0.4 0.4],ylim,'LineStyle','--','Color',[.7 .7 .7],'LineWidth',2)
+        histogram( nonsense_fitness , xl , 'Normalization','Probability');
+        histogram( extant_fitness , xl , 'Normalization','Probability');
+
+set(gca,'Xtick',0:.2:1)
+set(gca,'XtickLabel',0:.2:1)
+set(gca,'Ytick',[0 1])
+set(gca,'YtickLabel',[0 1])
+fprintf('Nonsense < 0.4 = %0.02f%%\n' , mean(nonsense_fitness<0.4)*100)
+fprintf('Nonsense < 0.6 = %0.02f%%\n' , mean(nonsense_fitness<0.6)*100)
+fprintf('Extant < 0.4 = %0.02f%%\n' , mean(extant_fitness<0.4)*100)
+fprintf('Extant < 0.6 = %0.02f%%\n' , mean(extant_fitness<0.6)*100)
+fprintf('Extant > 0.6 = %0.02f%%\n' , mean(extant_fitness>0.6)*100)
+
 %% plot histograms for each segment into a single figure
 % first version, >0.6 & < 0.4
 
