@@ -11,8 +11,7 @@ size	Number of nucleotide genotypes corresponding to amino acid sequence
 
 s		Fitness 
 		Estimated as exponent fitted in growth curve.
-		Fequencies of nucleotide genotypes corresponding to one amino acid genotype were summed before fitting. 
-		Scaled between 0 and 0.45, where 0 is fitness of nonsense genotypes summed together and 0.45 is wt fitness
+		Scaled so that 0 is the fitness of nonsense genotypes and 1.0 is wt fitness
 
 s_std	Error of fitness reported by fitting function.
 
